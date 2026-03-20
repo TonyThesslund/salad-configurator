@@ -41,3 +41,10 @@ export interface Recipe {
   slots?: Record<string, Ingredient | null>;
   is_public?: boolean;
 }
+
+export interface PriceListItem {
+  id: number;
+  item_id: number;
+  price: number;
+  type?: string;
+}
