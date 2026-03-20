@@ -1,13 +1,14 @@
-import { Header } from "./components/Header"
-import { Footer } from './Components/Footer';
+import { Header } from "./components/Header";
+import { Footer } from './components/Footer';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 p-8 flex flex-col justify-between">
+    <div className="min-h-screen flex flex-col bg-white font-sans">
       <Header/>
-      <h1 className="text-2xl font-bold mb-8 text-slate-700">
-        Welcome to React!
-      </h1>
+
+      <main className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
+
+      </main>
 
       <Footer/>
     </div>
