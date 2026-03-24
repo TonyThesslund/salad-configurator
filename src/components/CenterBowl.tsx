@@ -11,7 +11,7 @@ export function CenterBowl() {
             <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 flex items-center justify-center shadow-inner relative">
 
             </div>
-            <div>
+            <div className="flex gap-4">
                 <p>100g / 1,99€</p>
                 <p>500ml</p>
             </div>
