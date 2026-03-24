@@ -6,6 +6,7 @@ type SummaryBarProps = {
   totalPrice?: string;
 };
 
+
 export const SummaryBar: React.FC<SummaryBarProps> = ({
   ingredients = [],
   totalWeight = "0g",
