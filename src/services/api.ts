@@ -10,14 +10,14 @@ async function fetchJson<T>(endpoint: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-export async function getBowls() {
-  return fetchJson("bowls");
+export async function getBowls<T = unknown>(): Promise<T> {
+  return fetchJson<T>("bowls");
 }
 
-export async function getCategories() {
-  return fetchJson("categories");
+export async function getCategories<T = unknown>(): Promise<T> {
+  return fetchJson<T>("categories");
 }
 
-export async function getIngredients() {
-  return fetchJson("ingredients");
+export async function getIngredients<T = unknown>(): Promise<T> {
+  return fetchJson<T>("ingredients");
 }
