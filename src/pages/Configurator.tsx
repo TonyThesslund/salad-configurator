@@ -35,9 +35,9 @@ export default function Configurator() {
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
 
 useEffect(() => {
-    async function fetchBowls() {
+    const fetchBowls = async () => {
       try {
-        const data = await getBowls();
+        const data = await getBowls<Bowl[]>();
         setBowls(data);
       } catch (error) {
         console.error("Failed to fetch bowls:", error);
@@ -60,9 +60,6 @@ useEffect(() => {
 
     fetchCategories();
 
-  }, []);
-
-  useEffect(() => {
     const fetchIngredients = async () => {
       try {
         const data = await getIngredients<Ingredient[]>();
