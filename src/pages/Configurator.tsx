@@ -82,7 +82,7 @@ useEffect(() => {
 
         <BowlSelection bowls={bowls}/>
         <CenterBowl />
-        <BaseSelection />
+        <BaseSelection ingredients={ingredients} />
       </div>
 
       <IngredientSelection categories={categories} ingredients={ingredients}/>
