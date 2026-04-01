@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+
+import { useEffect, useState } from "react";
+import { getBowls } from "../services/getBowls";
+
 
 import { BaseSelection } from "../components/BaseSelection";
 import { BowlSelection } from "../components/BowlSelection";
@@ -27,11 +30,22 @@ interface Ingredient {
 
 export default function Configurator() {
 
+
   const [bowls, setBowls] = useState<Bowl[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
 
   useEffect(() => {
+    async function fetchBowls() {
+      try {
+        const data = await getBowls();
+        setBowls(data);
+      } catch (error) {
+        console.error("Failed to fetch bowls:", error);
+      }
+    }
+
+    fetchBowls();
 
   }, []);
 
