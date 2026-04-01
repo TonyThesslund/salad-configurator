@@ -1,5 +1,7 @@
+
 import { useEffect, useState } from "react";
 import { getBowls, getCategories } from "../services/api";
+import { getBowls } from "../services/getBowls";
 
 import { BaseSelection } from "../components/BaseSelection";
 import { BowlSelection } from "../components/BowlSelection";
@@ -27,18 +29,17 @@ interface Ingredient {
 }
 
 export default function Configurator() {
+
   const [bowls, setBowls] = useState<Bowl[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
 
-  // Hae kulhot
   useEffect(() => {
     async function fetchBowls() {
       try {
-        const data = await getBowls<Bowl[]>();
+        const data = await getBowls();
         setBowls(data);
       } catch (error) {
         console.error("Failed to fetch bowls:", error);
@@ -46,9 +47,9 @@ export default function Configurator() {
     }
 
     fetchBowls();
-  }, []);
+}, []);
+  
 
-  // Hae kategoriat
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -63,23 +64,22 @@ export default function Configurator() {
     };
 
     fetchCategories();
+
   }, []);
+  
 
   return (
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
       <div className="flex">
-        <BowlSelection bowls={bowls} />
-        <CenterBowl />
-        <BaseSelection />
-      </div>
 
-      {/* Näytä lataus tai virhe, jos tarpeen */}
       {isLoadingCategories && <p>Loading categories...</p>}
       {categoriesError && <p className="text-red-500">{categoriesError}</p>}
 
-      {/* Syötetään kategoriat ja ainesosat IngredientSelectioniin */}
-      <IngredientSelection categories={categories} ingredients={ingredients} />
-
+        <BowlSelection bowls={bowls}/>
+        <CenterBowl />
+        <BaseSelection />
+      </div>
+      <IngredientSelection categories={categories} ingredients={ingredients}/>
       <SummaryBar />
     </div>
   );
