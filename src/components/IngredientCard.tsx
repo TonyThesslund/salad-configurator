@@ -5,7 +5,7 @@ interface Ingredient {
   name: string;
   categoryId: number;
   price: number;
-  diets: string[];
+  diets?: string[];
 }
 
 interface Props {
