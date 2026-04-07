@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 type SummaryBarProps = {
   ingredients?: string[];
@@ -48,6 +49,12 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
             {totalPrice}
           </div>
         </div>
+
+        <Link to="/print">
+          <button className="bg-white text-black font-semibold py-2 px-6 rounded-full shadow-md hover:bg-zinc-100 transition-colors">
+            Print
+          </button>
+        </Link>
 
       </div>
     </div>
