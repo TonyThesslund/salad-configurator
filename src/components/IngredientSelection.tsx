@@ -21,17 +21,21 @@ interface Props {
 
 export function IngredientSelection({ ingredients, categories }: Props) {
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filteredCategories = categories.filter((cat) => cat.id !== 6);
   const filteredIngredients = ingredients
     .filter((ingredient) => ingredient.categoryId !== 6)
-    .filter((ingredient) => activeCategory === null || ingredient.categoryId === activeCategory);
+    .filter((ingredient) => activeCategory === null || ingredient.categoryId === activeCategory)
+    .filter((ingredient) => ingredient.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full shadow-lg">
       <input
         type="text"
         placeholder="Etsi tuotteita"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
         className="rounded-full px-6 py-3 text-black outline-none w-64 border-2 border-transparent focus:border-[#A2D135]"
       />
 
