@@ -12,9 +12,10 @@ export function Header() {
                 <h1>BOWL-LASKURI</h1>
             </div>
 
-            <div className="bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md">
+            {/* Intentionally commented out. Not sure if this is supposed to be here */}
+            {/* <div className="bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md">
 
-            </div>
+            </div> */}
 
             <div className="bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md">
                 <Link to="/community" className="font-bold hover:underline">
