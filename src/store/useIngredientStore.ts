@@ -47,7 +47,7 @@ export const useIngredientStore = create<IngredientStoreState>((set) => ({
 
             return state;
         });
-    },
+
     removeIngredient: (id) => {
         set((state) => {
             const newSlots = { ...state.slots };
@@ -59,5 +59,6 @@ export const useIngredientStore = create<IngredientStoreState>((set) => ({
             }
             return { slots: newSlots };
         });
+
     },
 }));
