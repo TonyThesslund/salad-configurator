@@ -4,17 +4,44 @@ import type { Ingredient } from '../types';
 export function CenterBowl() {
     const { slots } = useIngredientStore();
 
-    const activeIngredients = Object.values(slots).filter((i): i is Ingredient => i !== null);
+    const setBaseType = useIngredientStore((state) => state.setBaseType);
+    const baseType = useIngredientStore((state) => state.baseType);
+
+    const activeIngredients = Object.values(slots).filter(
+        (i): i is Ingredient => i !== null
+    );
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] mt-4 lg:mt-0">
+            
             <div className="flex gap-3 mb-6 items-center">
-                <button>Salaatti</button>
-                <button>Rahka</button>
+                <button
+                    onClick={() => setBaseType(1)}
+                    className={
+                        baseType === 1
+                            ? "border-2 border-green-500 px-3 py-1 rounded"
+                            : "border px-3 py-1 rounded"
+                    }
+                >
+                    Salaatti
+                </button>
+
+                <button
+                    onClick={() => setBaseType(2)}
+                    className={
+                        baseType === 2
+                            ? "border-2 border-green-500 px-3 py-1 rounded"
+                            : "border px-3 py-1 rounded"
+                    }
+                >
+                    Rahka
+                </button>
+
                 <button>Icon1</button>
                 <button>Icon2</button>
                 <button>Icon3</button>
             </div>
+
             <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 flex items-center justify-center shadow-inner relative">
                 <div className="flex flex-wrap gap-2 justify-center max-w-[240px]">
                     {activeIngredients.map((ingredient) => (
@@ -27,6 +54,7 @@ export function CenterBowl() {
                     ))}
                 </div>
             </div>
+
             <div className="flex gap-4">
                 <p>100g / 1,99€</p>
                 <p>500ml</p>
