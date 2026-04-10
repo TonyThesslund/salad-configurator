@@ -16,9 +16,10 @@ export const useIngredientStore = create<IngredientStoreState>((set) => ({
     slots: {},
     baseType: 1,
     selectedBowl: null,
-    setBaseType: (id) => set({ baseType: id }),
-    setBowl: (bowl) => set({ selectedBowl: bowl }),
+    setBaseType: (id) => set({ baseType: id, selectedBowl: null, slots: {},}),
+    setBowl: (bowl) => set({ selectedBowl: bowl, slots: {},}),
     clearSelection: () => set({ slots: {}, selectedBowl: null }),
+
     addIngredient: (item) => {
         set((state) => {
             if (item.categoryId === 6) {
@@ -47,6 +48,7 @@ export const useIngredientStore = create<IngredientStoreState>((set) => ({
 
             return state;
         });
+    },
 
     removeIngredient: (id) => {
         set((state) => {
