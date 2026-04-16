@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { IngredientCard } from "./IngredientCard";
 
 interface Ingredient {
@@ -19,24 +20,37 @@ interface Props {
 }
 
 export function IngredientSelection({ ingredients, categories }: Props) {
+  const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredCategories = categories.filter((cat) => cat.id !==6);
-  const filteredIngredients = ingredients.filter((ingredient) => ingredient.categoryId !== 6);
+  const filteredCategories = categories.filter((cat) => cat.id !== 6);
+  const filteredIngredients = ingredients
+    .filter((ingredient) => ingredient.categoryId !== 6)
+    .filter((ingredient) => activeCategory === null || ingredient.categoryId === activeCategory)
+    .filter((ingredient) => ingredient.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
- return (
+  return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full shadow-lg">
-
       <input
         type="text"
         placeholder="Etsi tuotteita"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
         className="rounded-full px-6 py-3 text-black outline-none w-64 border-2 border-transparent focus:border-[#A2D135]"
       />
 
       <div className="flex flex-wrap gap-3 mt-4">
+        <button
+          onClick={() => setActiveCategory(null)}
+          className={`${activeCategory === null ? 'bg-[#A2D135]' : 'bg-zinc-600'} text-black font-bold px-6 py-2 rounded-full hover:opacity-90`}
+        >
+          Kaikki
+        </button>
         {filteredCategories.map((category) => (
           <button
             key={category.id}
-            className="bg-[#A2D135] text-black font-bold px-6 py-2 rounded-full hover:opacity-90"
+            onClick={() => setActiveCategory(category.id)}
+            className={`${activeCategory === category.id ? 'bg-[#A2D135]' : 'bg-zinc-600'} text-black font-bold px-6 py-2 rounded-full hover:opacity-90`}
           >
             {category.name}
           </button>

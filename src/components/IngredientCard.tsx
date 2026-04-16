@@ -1,11 +1,12 @@
 import React from "react";
+import { useIngredientStore } from "../store/useIngredientStore";
 
 interface Ingredient {
   id: number;
   name: string;
   categoryId: number;
   price: number;
-  diets?: string[];
+  diets: string[];
 }
 
 interface Props {
@@ -13,12 +14,21 @@ interface Props {
 }
 
 export const IngredientCard = ({ ingredient }: Props) => {
+  const addIngredient = useIngredientStore(
+    (state) => state.addIngredient
+  );
+
   return (
-    <div className="w-30 h-17 border rounded-md shadow-sm p-2 flex flex-col justify-between items-center hover:shadow-md transition">
-      {/* Nimi wrapataan automaattisesti */}
+    <div
+      onClick={() => addIngredient(ingredient)}
+      className="w-30 h-17 border rounded-md shadow-sm p-2 flex flex-col justify-between items-center hover:shadow-md transition cursor-pointer"
+    >
+      {/* Nimi */}
       <div className="text-xs font-semibold text-center break-words">
         {ingredient.name}
       </div>
+
+      {/* Diet labels */}
       <div className="flex justify-center gap-1 flex-wrap">
         {ingredient.diets?.map((diet) => (
           <span
