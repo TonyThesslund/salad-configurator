@@ -3,11 +3,14 @@ import { Link } from "react-router-dom";
 import closeMenuIcon from "../assets/icons/close_menu.svg";
 import menuIcon from "../assets/icons/menu.svg";
 import fresseLogo from "../assets/icons/fresse.png";
+import { LoginModal } from "./LoginModal";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
 
     return (
+        <>
         <header className="bg-zinc-800 text-white w-full h-32 flex items-center px-8 gap-8 relative">
 
             <img src={fresseLogo} alt="Fresse logo" className="w-28 h-28 object-contain shrink-0" />
@@ -32,6 +35,16 @@ export function Header() {
 
                 {isMenuOpen && (
                     <div className="absolute top-full right-0 mt-2 bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md z-50">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsLoginOpen(true);
+                                setIsMenuOpen(false);
+                            }}
+                            className="font-bold text-left hover:underline"
+                        >
+                            Kirjaudu sisään
+                        </button>
                         <Link to="/community" className="font-bold hover:underline">
                             Saved recipes
                         </Link>
@@ -43,5 +56,7 @@ export function Header() {
             </div>
             
         </header>
-  );
+          <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+          </>
+      );
 }
