@@ -4,7 +4,8 @@ import { useIngredientStore } from "../store/useIngredientStore";
 import type { Ingredient } from "../types";
 
 export const SummaryBar: React.FC = () => {
-    const { slots, removeIngredient } = useIngredientStore();
+    const slots = useIngredientStore((state) => state.slots);
+    const removeIngredient = useIngredientStore((state) => state.removeIngredient);
 
     const activeIngredients = Object.values(slots).filter(
         (i): i is Ingredient => i !== null
@@ -15,9 +16,12 @@ export const SummaryBar: React.FC = () => {
             
             {/* Left: Selected Ingredients */}
             <div className="flex-1 bg-[#3a3a3a] rounded-3xl p-6 min-h-[150px] shadow-inner">
-                <h3 className="text-lg font-semibold mb-4">
-                    Valitut ainesosat ({activeIngredients.length})
-                </h3>
+                <div className="mb-4 flex items-center justify-between gap-3">
+                    <h3 className="text-lg font-semibold">Valitut ainesosat</h3>
+                    <span className="rounded-full bg-zinc-200 px-4 py-1 text-sm font-semibold text-black">
+                        {activeIngredients.length} kpl
+                    </span>
+                </div>
                 
                 {activeIngredients.length === 0 ? (
                     <p className="text-zinc-400">Ei valittuja ainesosia</p>
@@ -28,7 +32,7 @@ export const SummaryBar: React.FC = () => {
                                 key={item.id} 
                                 className="flex items-center justify-between text-sm bg-zinc-700 rounded-xl px-4 py-2"
                             >
-                                <span>• {item.name}</span>
+                                <span>{item.name}</span>
                                 <button
                                     onClick={() => removeIngredient(item.id)}
                                     className="text-red-400 hover:text-red-300 text-lg leading-none w-6 h-6 flex items-center justify-center hover:bg-zinc-600 rounded-full transition-colors"
