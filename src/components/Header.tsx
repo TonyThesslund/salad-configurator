@@ -2,24 +2,25 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import closeMenuIcon from "../assets/icons/close_menu.svg";
 import menuIcon from "../assets/icons/menu.svg";
-import { LoginModal } from "./LoginModal";
+import fresseLogo from "../assets/icons/fresse.png";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
 
     return (
-        <header className="bg-zinc-800 text-white w-full h-32 flex justify-between items-start px-8 pt-4 items-center">
-            <div className="w-24 h-24 rounded-full border-4 border-[#A2D135] flex items-center justify-center flex-col -mt-2 bg-zinc-800 shadow-lg">
-                <p>Fresh Food Factory</p>
-                <p>FRESSE</p>
+        <header className="bg-zinc-800 text-white w-full h-32 flex items-center justify-between px-8 gap-8">
+
+            <img src={fresseLogo} alt="Fresse logo" className="w-28 h-28 object-contain shrink-0" />
+
+            <div className="flex-1 flex items-center justify-center">
+                <h1 className="text-3xl font-bold">BOWL-LASKURI</h1>
             </div>
 
-            <div className="flex items-center justify-center flex-col">
-                <h1>BOWL-LASKURI</h1>
-            </div>
+            {/*  Login button?? Intentionally commented out. Not sure if this is supposed to be here.*/}
+            {/* <div className="bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md">
+            </div> */}
 
-            <div className="flex flex-col items-end gap-2 min-w-[200px]">
+            <div className="flex items-center gap-2 shrink-0 relative">
                 <button
                     type="button"
                     onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -36,17 +37,7 @@ export function Header() {
                 </button>
 
                 {isMenuOpen && (
-                    <div className="bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setIsLoginOpen(true);
-                                setIsMenuOpen(false);
-                            }}
-                            className="font-bold text-left hover:underline"
-                        >
-                            Kirjaudu sisään
-                        </button>
+                    <div className="absolute top-full right-0 mt-2 bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md z-50">
                         <Link to="/community" className="font-bold hover:underline">
                             Saved recipes
                         </Link>
@@ -56,11 +47,6 @@ export function Header() {
                     </div>
                 )}
             </div>
-
-            <LoginModal
-                isOpen={isLoginOpen}
-                onClose={() => setIsLoginOpen(false)}
-            />
             
         </header>
   );
