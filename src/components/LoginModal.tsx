@@ -13,8 +13,9 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		console.log("Login submitted", { email, password });
-		onClose();
+		console.log("Login clicked");
+		setEmail("");
+		setPassword("");
 	};
 
 	return (
