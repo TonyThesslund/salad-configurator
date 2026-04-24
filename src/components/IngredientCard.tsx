@@ -1,4 +1,3 @@
-import React from "react";
 import { useIngredientStore } from "../store/useIngredientStore";
 
 interface Ingredient {
@@ -6,7 +5,7 @@ interface Ingredient {
   name: string;
   categoryId: number;
   price: number;
-  diets: string[];
+  diets?: string[];
 }
 
 interface Props {

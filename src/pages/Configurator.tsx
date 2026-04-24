@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getBowls, getCategories, getIngredients } from "../services/api";
+import {
+  getBaseIngredients,
+  getBowls,
+  getCategories,
+  getIngredients,
+} from "../services/api";
 
 import { BaseSelection } from "../components/BaseSelection";
 import { BowlSelection } from "../components/BowlSelection";
@@ -8,15 +13,7 @@ import { IngredientSelection } from "../components/IngredientSelection";
 import { SummaryBar } from "../components/SummaryBar";
 
 import { useIngredientStore } from "../store/useIngredientStore";
-
-interface Bowl {
-  id: number;
-  name: string;
-  size: string;
-  base_type_id: number;
-  slot_count: number;
-  shape: string;
-}
+import type { Bowl } from "../types";
 
 interface Category {
   id: number;
@@ -32,10 +29,19 @@ interface Ingredient {
   price: number;
 }
 
+interface BaseIngredient {
+  id: number;
+  name: string;
+  price?: number;
+  type_id?: number;
+  base_type_id?: number;
+}
+
 export default function Configurator() {
   const [bowls, setBowls] = useState<Bowl[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
+  const [baseIngredients, setBaseIngredients] = useState<BaseIngredient[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
 
@@ -51,18 +57,6 @@ export default function Configurator() {
       }
     };
 
-    const fetchCategories = async () => {
-      try {
-        const data = await getCategories<Category[]>();
-        setCategories(data);
-      } catch (err) {
-        console.error("Failed to fetch categories:", err);
-        setCategoriesError("Failed to fetch categories");
-      } finally {
-        setIsLoadingCategories(false);
-      }
-    };
-
     const fetchIngredients = async () => {
       try {
         const data = await getIngredients<Ingredient[]>();
@@ -72,17 +66,41 @@ export default function Configurator() {
       }
     };
 
+    const fetchBaseIngredients = async () => {
+      try {
+        const data = await getBaseIngredients<BaseIngredient[]>();
+        setBaseIngredients(data);
+      } catch (err) {
+        console.error("Failed to fetch base ingredients:", err);
+      }
+    };
+
     fetchBowls();
-    fetchCategories();
     fetchIngredients();
+    fetchBaseIngredients();
   }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setIsLoadingCategories(true);
+      setCategoriesError(null);
+
+      try {
+        const data = await getCategories<Category[]>(baseType);
+        setCategories(data);
+      } catch (err) {
+        console.error("Failed to fetch categories:", err);
+        setCategoriesError("Failed to fetch categories");
+      } finally {
+        setIsLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, [baseType]);
 
   const filteredBowls = bowls.filter(
     (bowl) => bowl.base_type_id === baseType
-  );
-
-  const filteredCategories = categories.filter(
-    (cat) => cat.base_type_id === baseType
   );
 
   return (
@@ -95,11 +113,11 @@ export default function Configurator() {
 
         <BowlSelection bowls={filteredBowls} />
         <CenterBowl />
-        <BaseSelection ingredients={ingredients} />
+        <BaseSelection ingredients={baseIngredients} />
       </div>
 
       <IngredientSelection
-        categories={filteredCategories}
+        categories={categories}
         ingredients={ingredients}
       />
       <SummaryBar />
