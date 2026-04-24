@@ -2,7 +2,7 @@ import { useIngredientStore } from '../store/useIngredientStore';
 import type { Ingredient } from '../types';
 
 export function CenterBowl() {
-    const { slots } = useIngredientStore();
+    const { slots, selectedBowl } = useIngredientStore();
 
     const setBaseType = useIngredientStore((state) => state.setBaseType);
     const baseType = useIngredientStore((state) => state.baseType);
@@ -57,7 +57,7 @@ export function CenterBowl() {
 
             <div className="flex gap-4">
                 <p>100g / 1,99€</p>
-                <p>500ml</p>
+                <p>{selectedBowl ? selectedBowl.volume : 0} ml</p>
             </div>
         </div>
     );
