@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import closeMenuIcon from "../assets/icons/close_menu.svg";
 import menuIcon from "../assets/icons/menu.svg";
+import { LoginModal } from "./LoginModal";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
 
     return (
         <header className="bg-zinc-800 text-white w-full h-32 flex justify-between items-start px-8 pt-4 items-center">
@@ -16,10 +18,6 @@ export function Header() {
             <div className="flex items-center justify-center flex-col">
                 <h1>BOWL-LASKURI</h1>
             </div>
-
-            {/*  Login button?? Intentionally commented out. Not sure if this is supposed to be here.*/}
-            {/* <div className="bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md">
-            </div> */}
 
             <div className="flex flex-col items-end gap-2 min-w-[200px]">
                 <button
@@ -39,6 +37,16 @@ export function Header() {
 
                 {isMenuOpen && (
                     <div className="bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsLoginOpen(true);
+                                setIsMenuOpen(false);
+                            }}
+                            className="font-bold text-left hover:underline"
+                        >
+                            Kirjaudu sisään
+                        </button>
                         <Link to="/community" className="font-bold hover:underline">
                             Saved recipes
                         </Link>
@@ -48,6 +56,11 @@ export function Header() {
                     </div>
                 )}
             </div>
+
+            <LoginModal
+                isOpen={isLoginOpen}
+                onClose={() => setIsLoginOpen(false)}
+            />
             
         </header>
   );
