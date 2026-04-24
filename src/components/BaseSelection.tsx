@@ -1,24 +1,24 @@
-interface Ingredient {
+import { useIngredientStore } from "../store/useIngredientStore";
+
+interface BaseIngredient {
   id: number;
   name: string;
-  categoryId: number;
-  price: number;
+  price?: number;
+  type_id?: number;
+  base_type_id?: number;
 }
 
 interface BaseSelectionProps {
-  ingredients: Ingredient[];
+  ingredients: BaseIngredient[];
 }
 
 export function BaseSelection({ ingredients }: BaseSelectionProps) {
-  const baseNames = [
-    "Kuninkaallinen salaattimix",
-    "Saariston salaattisekoitus",
-    "Salaattimix rose",
-    "Jäävuorisalaatti leikattu",
-    "Provensaalisalaatti"
-  ];
+  const baseType = useIngredientStore((state) => state.baseType);
 
-  const bases = ingredients.filter(i => baseNames.includes(i.name));
+  const bases = ingredients.filter((ingredient) => {
+    const ingredientTypeId = ingredient.type_id ?? ingredient.base_type_id;
+    return ingredientTypeId === undefined || ingredientTypeId === baseType;
+  });
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
