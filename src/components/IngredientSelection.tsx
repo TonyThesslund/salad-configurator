@@ -17,9 +17,16 @@ interface Category {
 interface Props {
   ingredients: Ingredient[];
   categories: Category[];
+  isLoadingCategories?: boolean;
+  categoriesError?: string | null;
 }
 
-export function IngredientSelection({ ingredients, categories }: Props) {
+export function IngredientSelection({
+  ingredients,
+  categories,
+  isLoadingCategories = false,
+  categoriesError = null,
+}: Props) {
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -38,6 +45,13 @@ export function IngredientSelection({ ingredients, categories }: Props) {
         onChange={(e) => setSearchQuery(e.target.value)}
         className="rounded-full px-6 py-3 text-black outline-none w-64 border-2 border-transparent focus:border-[#A2D135]"
       />
+
+      {isLoadingCategories && (
+        <p className="mt-4 text-sm text-zinc-300">Loading categories...</p>
+      )}
+      {categoriesError && (
+        <p className="mt-4 text-sm text-red-400">{categoriesError}</p>
+      )}
 
       <div className="flex flex-wrap gap-3 mt-4">
         <button

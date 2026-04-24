@@ -106,11 +106,6 @@ export default function Configurator() {
   return (
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
       <div className="flex">
-        {isLoadingCategories && <p>Loading categories...</p>}
-        {categoriesError && (
-          <p className="text-red-500">{categoriesError}</p>
-        )}
-
         <BowlSelection bowls={filteredBowls} />
         <CenterBowl />
         <BaseSelection ingredients={baseIngredients} />
@@ -119,6 +114,8 @@ export default function Configurator() {
       <IngredientSelection
         categories={categories}
         ingredients={ingredients}
+        isLoadingCategories={isLoadingCategories}
+        categoriesError={categoriesError}
       />
       <SummaryBar />
     </div>
