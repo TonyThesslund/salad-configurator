@@ -16,11 +16,11 @@ export const SummaryBar: React.FC = () => {
             {/* Left: Selected Ingredients */}
             <div className="flex-1 bg-[#3a3a3a] rounded-3xl p-6 min-h-[150px] shadow-inner">
                 <h3 className="text-lg font-semibold mb-4">
-                    Selected ingredients ({activeIngredients.length})
+                    Valitut ainesosat ({activeIngredients.length})
                 </h3>
                 
                 {activeIngredients.length === 0 ? (
-                    <p className="text-zinc-400">No ingredients selected</p>
+                    <p className="text-zinc-400">Ei valittuja ainesosia</p>
                 ) : (
                     <ul className="space-y-2">
                         {activeIngredients.map((item) => (
@@ -45,20 +45,20 @@ export const SummaryBar: React.FC = () => {
             <div className="flex-1 flex flex-col justify-center items-center gap-6">
                 
                 <div className="flex flex-col items-center">
-                    <span className="text-sm mb-1">Total weight</span>
+                    <span className="text-sm mb-1">Arvioitu paino</span>
                     <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full mb-2 shadow-md text-center">
                         100g
                     </div>
                 </div>
                 <div className="flex flex-col items-center">
-                    <span className="text-sm mb-1">Total price</span>
+                    <span className="text-sm mb-1">Arvioitu hinta</span>
                     <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full mb-2 shadow-md text-center">
                         €0.00
                     </div>
                 </div>
                 <Link to="/print">
                     <button className="bg-white text-black font-semibold py-2 px-6 rounded-full shadow-md hover:bg-zinc-100 transition-colors">
-                        Print
+                        Tulosta
                     </button>
                 </Link>
             </div>
