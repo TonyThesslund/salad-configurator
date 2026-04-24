@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import type { ReactNode } from 'react';
+import closeMenuIcon from '../assets/icons/close_menu.svg';
 
 type ModalProps = {
 	isOpen: boolean;
@@ -7,16 +9,31 @@ type ModalProps = {
 };
 
 function Modal({ isOpen, onClose, children }: ModalProps) {
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				onClose();
+			}
+		};
+
+		window.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyDown);
+		};
+	}, [isOpen, onClose]);
+
 	if (!isOpen) return null;
 
 	return (
 		<div
 			className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-			onClick={onClose}
 			role="presentation"
 		>
 			<div
-				className="bg-white rounded-lg shadow-lg p-4 relative"
+				className="bg-white text-zinc-900 rounded-lg shadow-lg p-4 relative"
 				onClick={(event) => event.stopPropagation()}
 				role="dialog"
 				aria-modal="true"
@@ -24,10 +41,15 @@ function Modal({ isOpen, onClose, children }: ModalProps) {
 				<button
 					type="button"
 					onClick={onClose}
-					className="absolute top-2 right-2 text-sm leading-none"
+					className="absolute top-2 right-2 p-1"
 					aria-label="Close modal"
 				>
-					X
+					<img
+						src={closeMenuIcon}
+						alt=""
+						aria-hidden="true"
+						className="w-5 h-5 filter brightness-0"
+					/>
 				</button>
 				{children}
 			</div>
