@@ -6,7 +6,7 @@ export interface IngredientStoreState {
     baseType: number;
     selectedBowl: Bowl | null;
     setBaseType: (id: number) => void;
-    setBowl: (bowl: Bowl | null) => void;
+    setBowl: (bowl: Bowl) => void;
     clearSelection: () => void;
     addIngredient: (item: Ingredient) => void;
     removeIngredient: (id: number) => void;
