@@ -25,3 +25,22 @@ export async function getCategories<T = unknown>(typeId: number): Promise<T> {
 export async function getIngredients<T = unknown>(): Promise<T> {
   return fetchJson<T>("ingredients");
 }
+
+export async function login(email: string, password: string) {
+  const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      password,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Väärä sähköposti tai salasana");
+  }
+
+  return response.json();
+}
