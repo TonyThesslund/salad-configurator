@@ -1,6 +1,9 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import Modal from "./Modal";
+import { login as loginRequest } from "../services/api";
+import { useAuthStore } from "../store/UseAuthStore";
+
 
 type LoginModalProps = {
 	isOpen: boolean;
@@ -10,12 +13,25 @@ type LoginModalProps = {
 export function LoginModal({ isOpen, onClose }: LoginModalProps) {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState("");
 
-	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+	const login = useAuthStore((state) => state.login);
+
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		console.log("Login clicked");
-		setEmail("");
-		setPassword("");
+		setError("");
+
+		try {
+			const data = await loginRequest(email, password);
+
+			login(data.token, data.name);
+			setEmail("");
+			setPassword("");
+
+			onClose();
+		} catch (err: any) {
+			setError(err.message);
+		}
 	};
 
 	return (
@@ -48,6 +64,12 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
 						required
 					/>
 				</label>
+
+				{error && (
+					<p className="text-red-500 text-sm font-semibold">
+						{error}
+					</p>
+				)}
 
 				<button
 					type="submit"
