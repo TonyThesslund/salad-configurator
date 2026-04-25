@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import Modal from "./Modal";
 import { login as loginRequest } from "../services/api";
-import { useAuthStore } from "../store/UseAuthStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 
 type LoginModalProps = {

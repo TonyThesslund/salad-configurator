@@ -13,7 +13,8 @@ export function Header() {
     const userName = useAuthStore((state) => state.userName);
     const logout = useAuthStore((state) => state.logout);
 
-    const isLoggedIn = !!userName;
+    const token = useAuthStore((state) => state.token);
+    const isLoggedIn = !!token;
 
     return (
         <>
@@ -42,18 +43,7 @@ export function Header() {
                 {isMenuOpen && (
                     <div className="absolute top-full right-0 mt-2 bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md z-50">
                         {isLoggedIn ? (
-                         <button
-                              type="button"
-                              onClick={() => {
-                                 setIsLoginOpen(true);
-                                 setIsMenuOpen(false);
-                              }}
-                             className="font-bold text-left hover:underline"
-                         >
-                            Kirjaudu sisään
-                         </button>
-                        ) : (
-                           <>
+                            <>
                                 <p className="font-bold">
                                     Hello, {userName}
                                 </p>
@@ -68,6 +58,17 @@ export function Header() {
                                     Logout
                                 </button>
                             </>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsLoginOpen(true);
+                                    setIsMenuOpen(false);
+                                }}
+                                className="font-bold text-left hover:underline"
+                            >
+                                Kirjaudu sisään
+                            </button>
                         )}
                         
                         <Link to="/community" className="font-bold hover:underline">
