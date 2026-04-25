@@ -13,7 +13,8 @@ export function Header() {
     const userName = useAuthStore((state) => state.userName);
     const logout = useAuthStore((state) => state.logout);
 
-    const isLoggedIn = !!userName;
+    const token = useAuthStore((state) => state.token);
+    const isLoggedIn = !!token;
 
     return (
         <>
