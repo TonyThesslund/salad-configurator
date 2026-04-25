@@ -10,8 +10,24 @@ interface CenterBowlProps {
     onOpenSaveModal: () => void;
 }
 
+const SLOT_POSITIONS_6 = [
+    { top: '15%', left: '50%', transform: 'translate(-50%, 0)' },
+    { top: '25%', left: '75%', transform: 'translate(-50%, 0)' },
+    { top: '55%', left: '75%', transform: 'translate(-50%, 0)' },
+    { top: '65%', left: '50%', transform: 'translate(-50%, 0)' },
+    { top: '55%', left: '25%', transform: 'translate(-50%, 0)' },
+    { top: '25%', left: '25%', transform: 'translate(-50%, 0)' },
+];
+
+const SLOT_POSITIONS_4 = [
+    { top: '20%', left: '50%', transform: 'translate(-50%, 0)' },
+    { top: '50%', left: '78%', transform: 'translate(-50%, -50%)' },
+    { top: '78%', left: '50%', transform: 'translate(-50%, 0)' },
+    { top: '50%', left: '22%', transform: 'translate(-50%, -50%)' },
+];
+
 export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
-    const { slots, selectedBowl, clearSelection } = useIngredientStore();
+    const { slots, selectedBowl, clearSelection, clearSlot } = useIngredientStore();
 
     const DIVIDER_4 = "https://www.cc.puv.fi/~asa/fresh/images/jakaja_4_lohkoa.png";
     const DIVIDER_6 = "https://www.cc.puv.fi/~asa/fresh/images/jakaja_6_lohkoa.png";
@@ -23,10 +39,9 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
 
     const base = slots['base'] ?? null;
 
-    const activeIngredients = Object.entries(slots)
-        .filter(([key]) => key !== 'base')
-        .map(([, value]) => value)
-        .filter((i): i is Ingredient => i !== null);
+    const activeSlots = Object.entries(slots).filter(
+        ([key, value]) => key !== 'base' && value !== null
+    ) as [string, Ingredient][];
 
     const handleClearBowl = () => {
         const shouldClear = window.confirm('Are you sure you want to empty the bowl?');
@@ -35,57 +50,28 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
         }
     };
 
-    const slotCount = selectedBowl?.slot_count ?? 0;
-
     return (
         <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] mt-4 lg:mt-0">
             <div className="flex gap-3 mb-6 items-center">
                 <button
                     onClick={() => setBaseType(1)}
-                    className={
-                        baseType === 1
-                            ? "border-2 border-green-500 px-3 py-1 rounded"
-                            : "border px-3 py-1 rounded"
-                    }
+                    className={baseType === 1 ? "border-2 border-green-500 px-3 py-1 rounded" : "border px-3 py-1 rounded"}
                 >
                     Salaatti
                 </button>
-
                 <button
                     onClick={() => setBaseType(2)}
-                    className={
-                        baseType === 2
-                            ? "border-2 border-green-500 px-3 py-1 rounded"
-                            : "border px-3 py-1 rounded"
-                    }
+                    className={baseType === 2 ? "border-2 border-green-500 px-3 py-1 rounded" : "border px-3 py-1 rounded"}
                 >
                     Rahka
                 </button>
-
-                <button
-                    type="button"
-                    onClick={handleClearBowl}
-                    className="bg-gray-200 hover:bg-gray-300 rounded p-2"
-                    aria-label="Empty bowl"
-                >
+                <button type="button" onClick={handleClearBowl} className="bg-gray-200 hover:bg-gray-300 rounded p-2" aria-label="Empty bowl">
                     <img src={trashIcon} alt="" aria-hidden="true" className="w-5 h-5 brightness-0" />
                 </button>
-
-                <button
-                    type="button"
-                    onClick={() => alert('Feature coming soon!')}
-                    className="bg-gray-200 hover:bg-gray-300 rounded p-2"
-                    aria-label="Undo"
-                >
+                <button type="button" onClick={() => alert('Feature coming soon!')} className="bg-gray-200 hover:bg-gray-300 rounded p-2" aria-label="Undo">
                     <img src={undoIcon} alt="" aria-hidden="true" className="w-5 h-5 brightness-0" />
                 </button>
-
-                <button
-                    type="button"
-                    onClick={onOpenSaveModal}
-                    className="bg-gray-200 hover:bg-gray-300 rounded p-2"
-                    aria-label="Save"
-                >
+                <button type="button" onClick={onOpenSaveModal} className="bg-gray-200 hover:bg-gray-300 rounded p-2" aria-label="Save">
                     <img src={saveIcon} alt="" aria-hidden="true" className="w-5 h-5 brightness-0" />
                 </button>
             </div>
@@ -108,15 +94,32 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
                     />
                 )}
 
-                <div className="relative z-30 flex flex-wrap gap-2 justify-center max-w-[240px]">
-                    {activeIngredients.map((ingredient) => (
-                        <div
-                            key={ingredient.id}
-                            className="bg-white px-4 py-1.5 rounded-full text-sm shadow-sm border border-gray-100"
-                        >
-                            {ingredient.name}
-                        </div>
-                    ))}
+                <div className="absolute inset-0 z-30">
+                    {activeSlots.map(([slotKey, ingredient], index) => {
+                        const positions = selectedBowl?.slot_count === 4 ? SLOT_POSITIONS_4 : SLOT_POSITIONS_6;
+                        const pos = positions[index] ?? positions[0];
+                        return (
+                            <div
+                                key={slotKey}
+                                className="absolute group rounded-full overflow-hidden shadow-md w-14 h-14"
+                                style={{ top: pos.top, left: pos.left, transform: pos.transform }}
+                            >
+                                <img
+                                    src={ingredient.wedge_image_url || ingredient.image_url}
+                                    alt={ingredient.name}
+                                    className="w-full h-full object-cover"
+                                />
+                                <button
+                                    onClick={() => clearSlot(slotKey)}
+                                    className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-full gap-1"
+                                    aria-label={`Poista ${ingredient.name}`}
+                                >
+                                    <span className="text-white text-xs font-medium leading-tight text-center px-1">{ingredient.name}</span>
+                                    <span className="text-white text-xl font-bold leading-none">×</span>
+                                </button>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
 

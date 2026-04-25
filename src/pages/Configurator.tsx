@@ -16,7 +16,6 @@ import { SummaryBar } from "../components/SummaryBar";
 
 import { useIngredientStore } from "../store/useIngredientStore";
 import type { Bowl } from "../types";
-
 interface Category {
   id: number;
   name: string;
