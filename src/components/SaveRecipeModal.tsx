@@ -1,6 +1,9 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import Modal from "./Modal";
+import { saveRecipe } from "../services/api";
+import { useIngredientStore } from "../store/useIngredientStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 type SaveRecipeModalProps = {
     isOpen: boolean;
@@ -11,16 +14,31 @@ export function SaveRecipeModal({ isOpen, onClose }: SaveRecipeModalProps) {
     const [recipeName, setRecipeName] = useState("");
     const [isPublic, setIsPublic] = useState(false);
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const slots = useIngredientStore((state) => state.slots);
+    const selectedBowl = useIngredientStore((state) => state.selectedBowl);
+    const token = useAuthStore((state) => state.token);
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        console.log("Recipe Name:", recipeName);
-        console.log("Make Public:", isPublic);
+        const ingredientIds = Object.values(slots)
+        .filter((i) => i !== null)
+        .map((i: any ) => i.id);
 
-        setRecipeName("");
-        setIsPublic(false);
 
-        onClose();
+        try{
+            await saveRecipe(token!, {
+                name: recipeName,
+                bowlId: selectedBowl?.id ?? 0,
+                ingredientsIds: ingredientIds,
+            });
+
+            setRecipeName("");
+            setIsPublic(false);
+            onClose();
+        }catch (err) {
+        console.error("Failed to save recipe:", err);
+        }
     };
 
     return (
@@ -29,7 +47,7 @@ export function SaveRecipeModal({ isOpen, onClose }: SaveRecipeModalProps) {
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-4 min-w-[320px] pt-4"
             >
-                <h2 className="text-x1 font-semibold">
+                <h2 className="text-xl font-semibold">
                     Tallenna resepti
                 </h2>
 
@@ -56,7 +74,7 @@ export function SaveRecipeModal({ isOpen, onClose }: SaveRecipeModalProps) {
 
                 <button
                     type="submit"
-                    className="mt-2 rounded-md bg[#A2D135] px-4 py-2 font-semibold text-black hover:brightness-95"
+                    className="mt-2 rounded-md bg-[#A2D135] px-4 py-2 font-semibold text-black hover:brightness-95"
                 >
                     Tallenna resepti
                 </button>
