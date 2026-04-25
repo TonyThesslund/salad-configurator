@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { useIngredientStore } from '../store/useIngredientStore';
 import type { Ingredient } from '../types';
 import trashIcon from '../assets/icons/trash.svg';
 import undoIcon from '../assets/icons/undo.svg';
 import saveIcon from '../assets/icons/save.svg';
+import SaveRecipeModal from './SaveRecipeModal';
 
 interface CenterBowlProps {
     onOpenSaveModal: () => void;
@@ -13,6 +15,8 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
 
     const setBaseType = useIngredientStore((state) => state.setBaseType);
     const baseType = useIngredientStore((state) => state.baseType);
+
+    const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
     const activeIngredients = Object.values(slots).filter(
         (i): i is Ingredient => i !== null
@@ -70,6 +74,7 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
                 <button
                     type="button"
                     onClick={onOpenSaveModal}
+
                     className="bg-gray-200 hover:bg-gray-300 rounded p-2"
                     aria-label="Save"
                 >
@@ -94,6 +99,11 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
                 <p>100g / 1,99€</p>
                 <p>{selectedBowl ? selectedBowl.volume : 0} ml</p>
             </div>
+
+            <SaveRecipeModal
+                isOpen={isSaveModalOpen}
+                onClose={() => setIsSaveModalOpen(false)}
+            />
         </div>
     );
 }

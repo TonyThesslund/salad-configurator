@@ -35,9 +35,10 @@ export async function getPrices<T = unknown>(token: string): Promise<T> {
     },
   });
 
-   if (!response.ok) {
-      throw new Error(`Failed to fetch prices: ${response.status}`);
-    }
+  if (!response.ok) {
+    throw new Error(`Failed to fetch prices: ${response.status}`);
+  }
+
   return response.json();
 }
 
@@ -60,11 +61,14 @@ export async function login(email: string, password: string) {
   return response.json();
 }
 
-export async function saveRecipe(token: string, recipeData: {
-  name: string;
-  bowlId: number;
-  ingredientsIds: number[];
-}) {
+export async function saveRecipe(
+  token: string,
+  recipeData: {
+    name: string;
+    bowlId: number;
+    ingredientIds: number[];
+  }
+) {
   const response = await fetch(`${API_BASE_URL}/recipes`, {
     method: "POST",
     headers: {
@@ -73,9 +77,10 @@ export async function saveRecipe(token: string, recipeData: {
     },
     body: JSON.stringify(recipeData),
   });
-  
+
   if (!response.ok) {
     throw new Error(`Failed to save recipe: ${response.status}`);
   }
+
   return response.json();
 }
