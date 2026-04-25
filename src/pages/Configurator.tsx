@@ -10,6 +10,7 @@ import { BaseSelection } from "../components/BaseSelection";
 import { BowlSelection } from "../components/BowlSelection";
 import { CenterBowl } from "../components/CenterBowl";
 import { IngredientSelection } from "../components/IngredientSelection";
+import { SaveRecipeModal } from "../components/SaveRecipeModal";
 import { SummaryBar } from "../components/SummaryBar";
 
 import { useIngredientStore } from "../store/useIngredientStore";
@@ -44,6 +45,7 @@ export default function Configurator() {
   const [baseIngredients, setBaseIngredients] = useState<BaseIngredient[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
+  const [isSaveRecipeModalOpen, setIsSaveRecipeModalOpen] = useState(false);
 
   const baseType = useIngredientStore((state) => state.baseType);
 
@@ -107,7 +109,7 @@ export default function Configurator() {
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
       <div className="flex">
         <BowlSelection bowls={filteredBowls} />
-        <CenterBowl />
+        <CenterBowl onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} />
         <BaseSelection ingredients={baseIngredients} />
       </div>
 
@@ -118,6 +120,10 @@ export default function Configurator() {
         categoriesError={categoriesError}
       />
       <SummaryBar />
+      <SaveRecipeModal
+        isOpen={isSaveRecipeModalOpen}
+        onClose={() => setIsSaveRecipeModalOpen(false)}
+      />
     </div>
   );
 }
