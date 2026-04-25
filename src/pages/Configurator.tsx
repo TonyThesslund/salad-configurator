@@ -54,15 +54,6 @@ export default function Configurator() {
   const baseType = useIngredientStore((state) => state.baseType);
 
   useEffect(() => {
-    const fetchBowls = async () => {
-      try {
-        const data = await getBowls<Bowl[]>();
-        setBowls(data);
-      } catch (error) {
-        console.error("Failed to fetch bowls:", error);
-      }
-    };
-
     const fetchIngredients = async () => {
       try {
         const data = await getIngredients<Ingredient[]>();
@@ -81,12 +72,20 @@ export default function Configurator() {
       }
     };
 
-    fetchBowls();
     fetchIngredients();
     fetchSaladBases();
   }, []);
 
   useEffect(() => {
+    const fetchBowls = async () => {
+      try {
+        const data = await getBowls<Bowl[]>(baseType);
+        setBowls(data);
+      } catch (error) {
+        console.error("Failed to fetch bowls:", error);
+      }
+    };
+
     const fetchCategories = async () => {
       setIsLoadingCategories(true);
       setCategoriesError(null);
@@ -102,12 +101,9 @@ export default function Configurator() {
       }
     };
 
+    fetchBowls();
     fetchCategories();
   }, [baseType]);
-
-  const filteredBowls = bowls.filter(
-    (bowl) => bowl.base_type_id === baseType
-  );
 
   const bases = useMemo<BaseIngredient[]>(() => {
     if (baseType === 1) {
@@ -126,7 +122,7 @@ export default function Configurator() {
   return (
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
       <div className="flex">
-        <BowlSelection bowls={filteredBowls} />
+        <BowlSelection bowls={bowls} />
         <CenterBowl onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} />
         <BaseSelection bases={bases} />
       </div>
