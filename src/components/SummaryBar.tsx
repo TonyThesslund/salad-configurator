@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useIngredientStore } from "../store/useIngredientStore";
+import { usePriceStore } from "../store/usePriceStore";
 import type { Ingredient } from "../types";
 import { calculateTotalWeight } from "../utils/calculations";
 
@@ -8,11 +9,21 @@ export const SummaryBar: React.FC = () => {
     const slots = useIngredientStore((state) => state.slots);
     const removeIngredient = useIngredientStore((state) => state.removeIngredient);
 
+    const prices = usePriceStore((state) => state.prices);
+
     const activeIngredients = Object.values(slots).filter(
         (i): i is Ingredient => i !== null
     );
 
     const totalWeight = calculateTotalWeight(activeIngredients);
+
+    const totalPrice = activeIngredients.reduce((sum, item) => {
+        const priceItem = prices.find(
+            (p: any) => p.item_id === item.id
+        );
+        
+        return sum + (priceItem ? priceItem.price : 0);
+    }, 0);
 
     return (
         <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
@@ -60,7 +71,7 @@ export const SummaryBar: React.FC = () => {
                 <div className="flex flex-col items-center">
                     <span className="text-sm mb-1">Arvioitu hinta</span>
                     <div className="bg-white text-black font-black text-2xl py-3 w-32 rounded-full mb-2 shadow-md text-center">
-                        €0.00
+                        {totalPrice.toFixed(2)} €
                     </div>
                 </div>
                 <Link to="/print">
