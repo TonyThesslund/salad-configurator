@@ -60,3 +60,22 @@ export async function login(email: string, password: string) {
   return response.json();
 }
 
+export async function saveRecipe(token: string, recipeData: {
+  name: string;
+  bowlId: number;
+  ingredientsIds: number[];
+}) {
+  const response = await fetch(`${API_BASE_URL}/recipes`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(recipeData),
+  });
+  
+  if (!response.ok) {
+    throw new Error(`Failed to save recipe: ${response.status}`);
+  }
+  return response.json();
+}
