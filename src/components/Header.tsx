@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import closeMenuIcon from "../assets/icons/close_menu.svg";
 import menuIcon from "../assets/icons/menu.svg";
 import fresseLogo from "../assets/icons/fresse.png";
 import { LoginModal } from "./LoginModal";
 import { useAuthStore } from "../store/useAuthStore";
+import { usePriceStore } from "../store/usePriceStore";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,7 +15,14 @@ export function Header() {
     const logout = useAuthStore((state) => state.logout);
 
     const token = useAuthStore((state) => state.token);
+    const fetchPrices = usePriceStore((state) => state.fetchPrices);
     const isLoggedIn = !!token;
+
+    useEffect(() => {
+        if (token) {
+            fetchPrices(token);
+        }
+    }, [token]);
 
     return (
         <>
