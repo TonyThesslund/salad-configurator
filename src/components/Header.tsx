@@ -1,13 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import closeMenuIcon from "../assets/icons/close_menu.svg";
 import menuIcon from "../assets/icons/menu.svg";
 import fresseLogo from "../assets/icons/fresse.png";
 import { LoginModal } from "./LoginModal";
+import { useAuthStore } from "../store/useAuthStore";
+import { usePriceStore } from "../store/usePriceStore";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+    const userName = useAuthStore((state) => state.userName);
+    const logout = useAuthStore((state) => state.logout);
+
+    const token = useAuthStore((state) => state.token);
+    const fetchPrices = usePriceStore((state) => state.fetchPrices);
+    const isLoggedIn = !!token;
+
+    useEffect(() => {
+        if (token) {
+            fetchPrices(token);
+        }
+    }, [token]);
 
     return (
         <>
@@ -35,16 +50,35 @@ export function Header() {
 
                 {isMenuOpen && (
                     <div className="absolute top-full right-0 mt-2 bg-[#A2D135] text-black rounded-b-3xl rounded-t-xl px-6 py-4 flex flex-col gap-2 min-w-[200px] shadow-md z-50">
-                        <button
-                            type="button"
-                            onClick={() => {
-                                setIsLoginOpen(true);
-                                setIsMenuOpen(false);
-                            }}
-                            className="font-bold text-left hover:underline"
-                        >
-                            Kirjaudu sisään
-                        </button>
+                        {isLoggedIn ? (
+                            <>
+                                <p className="font-bold">
+                                    Hello, {userName}
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        logout();
+                                        setIsMenuOpen(false);
+                                    }}
+                                    className="font-bold text-left hover:underline"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsLoginOpen(true);
+                                    setIsMenuOpen(false);
+                                }}
+                                className="font-bold text-left hover:underline"
+                            >
+                                Kirjaudu sisään
+                            </button>
+                        )}
+                        
                         <Link to="/community" className="font-bold hover:underline">
                             Saved recipes
                         </Link>
