@@ -4,30 +4,27 @@ import type { Ingredient } from "../types";
 interface BaseIngredient {
   id: number;
   name: string;
+  categoryId: number;
   price?: number;
-  type_id?: number;
-  base_type_id?: number;
+  weight_grams?: number;
+  image_url?: string;
+  wedge_image_url?: string;
+  barcode_url?: string;
 }
 
 interface BaseSelectionProps {
-  ingredients: BaseIngredient[];
+  bases: BaseIngredient[];
 }
 
-export function BaseSelection({ ingredients }: BaseSelectionProps) {
-  const baseType = useIngredientStore((state) => state.baseType);
+export function BaseSelection({ bases }: BaseSelectionProps) {
   const addIngredient = useIngredientStore((state) => state.addIngredient);
   const selectedBaseId = useIngredientStore((state) => state.slots.base?.id);
-
-  const bases = ingredients.filter((ingredient) => {
-    const ingredientTypeId = ingredient.type_id ?? ingredient.base_type_id;
-    return ingredientTypeId === undefined || ingredientTypeId === baseType;
-  });
 
   const handleBaseSelect = (base: BaseIngredient) => {
     const mappedBase: Ingredient = {
       id: base.id,
       name: base.name,
-      categoryId: 6,
+      categoryId: base.categoryId,
       price: base.price ?? 0,
     };
 
@@ -46,7 +43,7 @@ export function BaseSelection({ ingredients }: BaseSelectionProps) {
         {bases.length === 0 ? (
           <p>Ei saatavilla</p>
         ) : (
-          bases.map(base => (
+          bases.map((base) => (
             <button
               key={base.id}
               type="button"

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 import {
   getBaseIngredients,
   getBowls,
@@ -33,16 +34,19 @@ interface Ingredient {
 interface BaseIngredient {
   id: number;
   name: string;
+  categoryId: number;
   price?: number;
-  type_id?: number;
-  base_type_id?: number;
+  weight_grams?: number;
+  image_url?: string;
+  wedge_image_url?: string;
+  barcode_url?: string;
 }
 
 export default function Configurator() {
   const [bowls, setBowls] = useState<Bowl[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
-  const [baseIngredients, setBaseIngredients] = useState<BaseIngredient[]>([]);
+  const [saladBases, setSaladBases] = useState<BaseIngredient[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
   const [isSaveRecipeModalOpen, setIsSaveRecipeModalOpen] = useState(false);
@@ -68,10 +72,10 @@ export default function Configurator() {
       }
     };
 
-    const fetchBaseIngredients = async () => {
+    const fetchSaladBases = async () => {
       try {
         const data = await getBaseIngredients<BaseIngredient[]>();
-        setBaseIngredients(data);
+        setSaladBases(data);
       } catch (err) {
         console.error("Failed to fetch base ingredients:", err);
       }
@@ -79,7 +83,7 @@ export default function Configurator() {
 
     fetchBowls();
     fetchIngredients();
-    fetchBaseIngredients();
+    fetchSaladBases();
   }, []);
 
   useEffect(() => {
@@ -105,12 +109,26 @@ export default function Configurator() {
     (bowl) => bowl.base_type_id === baseType
   );
 
+  const bases = useMemo<BaseIngredient[]>(() => {
+    if (baseType === 1) {
+      return saladBases;
+    }
+    return ingredients
+      .filter((ing) => ing.categoryId === 1)
+      .map((ing) => ({
+        id: ing.id,
+        name: ing.name,
+        categoryId: ing.categoryId,
+        price: ing.price,
+      }));
+  }, [baseType, saladBases, ingredients]);
+
   return (
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
       <div className="flex">
         <BowlSelection bowls={filteredBowls} />
         <CenterBowl onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} />
-        <BaseSelection ingredients={baseIngredients} />
+        <BaseSelection bases={bases} />
       </div>
 
       <IngredientSelection
