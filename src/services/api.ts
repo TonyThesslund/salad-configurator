@@ -25,3 +25,18 @@ export async function getCategories<T = unknown>(typeId: number): Promise<T> {
 export async function getIngredients<T = unknown>(): Promise<T> {
   return fetchJson<T>("ingredients");
 }
+
+export async function getPrices<T = unknown>(token: string): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}/prices`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+   if (!response.ok) {
+      throw new Error(`Failed to fetch prices: ${response.status}`);
+    }
+  return response.json();
+}
