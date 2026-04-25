@@ -6,7 +6,11 @@ import undoIcon from '../assets/icons/undo.svg';
 import saveIcon from '../assets/icons/save.svg';
 import SaveRecipeModal from './SaveRecipeModal';
 
-export function CenterBowl() {
+interface CenterBowlProps {
+    onOpenSaveModal: () => void;
+}
+
+export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
     const { slots, selectedBowl, clearSelection } = useIngredientStore();
 
     const setBaseType = useIngredientStore((state) => state.setBaseType);
@@ -69,7 +73,8 @@ export function CenterBowl() {
                 </button>
                 <button
                     type="button"
-                    onClick={() => setIsSaveModalOpen(true)}
+                    onClick={onOpenSaveModal}
+
                     className="bg-gray-200 hover:bg-gray-300 rounded p-2"
                     aria-label="Save"
                 >
