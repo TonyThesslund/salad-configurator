@@ -7,9 +7,17 @@ export interface AuthStoreState {
     logout: () => void;
 }
 
+const storedToken = localStorage.getItem("my_real_token");
+const storedUserName = localStorage.getItem("userName");
+
+// If a token exists without a userName the session is invalid — clear it
+if (storedToken && !storedUserName) {
+    localStorage.removeItem("my_real_token");
+}
+
 export const useAuthStore = create<AuthStoreState>((set) => ({
-    token: localStorage.getItem("my_real_token"),
-    userName: localStorage.getItem("userName"),
+    token: storedToken && storedUserName ? storedToken : null,
+    userName: storedUserName,
 
     login: (token, userName) => {
         localStorage.setItem("my_real_token", token);

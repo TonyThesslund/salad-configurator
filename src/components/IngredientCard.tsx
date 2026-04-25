@@ -1,6 +1,6 @@
 import { useIngredientStore } from "../store/useIngredientStore";
 import { usePriceStore } from "../store/usePriceStore";
-import { useAuthStore } from "../store/UseAuthStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 interface Ingredient {
   id: number;
