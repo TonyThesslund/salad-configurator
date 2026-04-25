@@ -1,4 +1,6 @@
 import { useIngredientStore } from "../store/useIngredientStore";
+import { usePriceStore } from "../store/usePriceStore";
+import { useAuthStore } from "../store/useAuthStore";
 
 interface Ingredient {
   id: number;
@@ -17,6 +19,13 @@ export const IngredientCard = ({ ingredient }: Props) => {
     (state) => state.addIngredient
   );
 
+  const prices = usePriceStore((state) => state.prices);
+  const token = useAuthStore((state) => state.token);
+
+  const priceItem = prices.find(
+    (p: any) => p.item_id === ingredient.id
+  );
+
   return (
     <div
       onClick={() => addIngredient(ingredient)}
@@ -25,6 +34,24 @@ export const IngredientCard = ({ ingredient }: Props) => {
       {/* Nimi */}
       <div className="text-xs font-semibold text-center break-words">
         {ingredient.name}
+      </div>
+
+      <div className="text-[0.65rem] font-semibold text-center">
+        {token ? (
+          priceItem ? (
+            <span className="text-green-600">
+              + {priceItem.price} €
+            </span>
+          ) : (
+            <span className="text-gray-400">
+              No price
+            </span>
+          )
+        ) : (
+          <span className="text-gray-400">
+            Login to see price
+          </span>
+        )}
       </div>
 
       {/* Diet labels */}

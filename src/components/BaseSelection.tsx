@@ -1,4 +1,5 @@
 import { useIngredientStore } from "../store/useIngredientStore";
+import type { Ingredient } from "../types";
 
 interface BaseIngredient {
   id: number;
@@ -14,11 +15,24 @@ interface BaseSelectionProps {
 
 export function BaseSelection({ ingredients }: BaseSelectionProps) {
   const baseType = useIngredientStore((state) => state.baseType);
+  const addIngredient = useIngredientStore((state) => state.addIngredient);
+  const selectedBaseId = useIngredientStore((state) => state.slots.base?.id);
 
   const bases = ingredients.filter((ingredient) => {
     const ingredientTypeId = ingredient.type_id ?? ingredient.base_type_id;
     return ingredientTypeId === undefined || ingredientTypeId === baseType;
   });
+
+  const handleBaseSelect = (base: BaseIngredient) => {
+    const mappedBase: Ingredient = {
+      id: base.id,
+      name: base.name,
+      categoryId: 6,
+      price: base.price ?? 0,
+    };
+
+    addIngredient(mappedBase);
+  };
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
@@ -35,7 +49,13 @@ export function BaseSelection({ ingredients }: BaseSelectionProps) {
           bases.map(base => (
             <button
               key={base.id}
-              className="h-12 border-2 border-gray-600 rounded-xl flex items-center px-4 hover:border-[#A2D135] hover:text-[#A2D135] transition"
+              type="button"
+              onClick={() => handleBaseSelect(base)}
+              className={`h-12 border-2 rounded-xl flex items-center px-4 transition ${
+                selectedBaseId === base.id
+                  ? "border-[#A2D135] text-[#A2D135]"
+                  : "border-gray-600 hover:border-[#A2D135] hover:text-[#A2D135]"
+              }`}
             >
               <span>{base.name}</span>
             </button>
