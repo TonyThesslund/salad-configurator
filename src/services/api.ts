@@ -26,6 +26,21 @@ export async function getIngredients<T = unknown>(): Promise<T> {
   return fetchJson<T>("ingredients");
 }
 
+export async function getPrices<T = unknown>(token: string): Promise<T> {
+  const response = await fetch(`${API_BASE_URL}/prices`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+   if (!response.ok) {
+      throw new Error(`Failed to fetch prices: ${response.status}`);
+    }
+  return response.json();
+}
+
 export async function login(email: string, password: string) {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",
@@ -44,3 +59,4 @@ export async function login(email: string, password: string) {
 
   return response.json();
 }
+
