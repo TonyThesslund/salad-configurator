@@ -32,14 +32,14 @@ export function BaseSelection({ bases }: BaseSelectionProps) {
   };
 
   return (
-    <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
+    <div className="bg-zinc-800 rounded-[3rem] pt-3 pb-6 px-3 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
       <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center mb-4 shrink-0">
         2
       </div>
 
       <h2 className="mb-6 font-semibold text-lg">Valitse salaattipohja</h2>
 
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-3">
         {bases.length === 0 ? (
           <p>Ei saatavilla</p>
         ) : (
@@ -48,13 +48,27 @@ export function BaseSelection({ bases }: BaseSelectionProps) {
               key={base.id}
               type="button"
               onClick={() => handleBaseSelect(base)}
-              className={`h-12 border-2 rounded-xl flex items-center px-4 transition ${
+              className={`h-14 relative flex items-center px-4 rounded-xl transition text-left bg-transparent border-0 ${
                 selectedBaseId === base.id
-                  ? "border-[#A2D135] text-[#A2D135]"
-                  : "border-gray-600 hover:border-[#A2D135] hover:text-[#A2D135]"
+                  ? "text-[#A2D135]"
+                  : "text-white hover:text-[#A2D135]"
               }`}
             >
-              <span>{base.name}</span>
+              <span className="text-base text-left break-words pr-16 block w-full">
+                {base.name}
+              </span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2">
+                {base.image_url ? (
+                  <img
+                    src={base.image_url}
+                    alt={base.name}
+                    className="w-12 h-12 rounded-full object-cover shadow"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span className="w-12 h-12 rounded-full bg-zinc-700 border border-zinc-500" aria-hidden="true" />
+                )}
+              </span>
             </button>
           ))
         )}
