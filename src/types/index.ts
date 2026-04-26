@@ -11,9 +11,7 @@ export interface Bowl extends BaseType {
   volume?: number;
   slot_count: number;
   shape: 'round' | 'square';
-  wedge_image_url?: string; 
 }
-
 
 export interface Category {
   id: number;
