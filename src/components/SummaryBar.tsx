@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useIngredientStore } from "../store/useIngredientStore";
 import { usePriceStore } from "../store/usePriceStore";
 import type { Ingredient } from "../types";
-import { calculateTotalWeight } from "../utils/calculations";
+import { calculateTotalWeight, calculateTotalPrice } from "../utils/calculations";
 
 export const SummaryBar: React.FC = () => {
     const slots = useIngredientStore((state) => state.slots);
@@ -17,13 +17,7 @@ export const SummaryBar: React.FC = () => {
 
     const totalWeight = calculateTotalWeight(activeIngredients);
 
-    const totalPrice = activeIngredients.reduce((sum, item) => {
-        const priceItem = prices.find(
-            (p: any) => p.item_id === item.id
-        );
-        
-        return sum + (priceItem ? priceItem.price : 0);
-    }, 0);
+    const totalPrice = calculateTotalPrice(activeIngredients, prices);
 
     return (
         <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
