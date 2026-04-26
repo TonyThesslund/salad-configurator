@@ -6,8 +6,20 @@ import undoIcon from '../assets/icons/undo.svg';
 import saveIcon from '../assets/icons/save.svg';
 import SaveRecipeModal from './SaveRecipeModal';
 
+interface BaseIngredient {
+    id: number;
+    name: string;
+    categoryId: number;
+    price?: number;
+    weight_grams?: number;
+    image_url?: string;
+    wedge_image_url?: string;
+    barcode_url?: string;
+}
+
 interface CenterBowlProps {
     onOpenSaveModal: () => void;
+    baseIngredients: BaseIngredient[];
 }
 
 const SLOT_POSITIONS_6 = [
@@ -26,7 +38,7 @@ const SLOT_POSITIONS_4 = [
     { top: '50%', left: '22%', transform: 'translate(-50%, -50%)' },
 ];
 
-export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
+export function CenterBowl({ onOpenSaveModal, baseIngredients }: CenterBowlProps) {
     const { slots, selectedBowl, clearSelection, clearSlot } = useIngredientStore();
 
     const DIVIDER_4 = "src/assets/icons/divider_4.png";
@@ -37,7 +49,10 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
 
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
-    const base = slots['base'] ?? null;
+    const baseSlot = slots['base'] ?? null;
+    const base = baseSlot && baseIngredients
+        ? baseIngredients.find(b => b.id === baseSlot.id) || null
+        : null;
 
     const activeSlots = Object.entries(slots).filter(
         ([key, value]) => key !== 'base' && value !== null
@@ -90,6 +105,40 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
                         }
                     />
                 )}
+
+                {base?.image_url && (
+                    <div
+                        className={
+                            selectedBowl?.shape === 'square'
+                                ? 'absolute left-1/2 top-1/2 w-[80%] h-[80%] -translate-x-1/2 -translate-y-1/2 z-35 pointer-events-none select-none rounded-[4rem] overflow-hidden'
+                                : 'absolute left-1/2 top-1/2 w-[80%] h-[80%] -translate-x-1/2 -translate-y-1/2 z-35 pointer-events-none select-none rounded-full overflow-hidden'
+                        }
+                        style={{ filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.18))' }}
+                    >
+                        {/* Salad base image with edge blur/darkening */}
+                        <img
+                            src={base.image_url}
+                            alt={base.name}
+                            className="w-full h-full object-cover"
+                            style={{ filter: 'brightness(0.97)' }}
+                        />
+                        {/* Edge vignette for base image */}
+                        <div
+                            className="absolute inset-0 pointer-events-none"
+                            style={{
+                                background: 'radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.2) 100%)'
+                            }}
+                        />
+                        {/* Bottom shadow/gradient for base image */}
+                        <div
+                            className="absolute left-0 right-0 bottom-0 h-1/2 pointer-events-none"
+                            style={{
+                                background: 'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.22) 100%)'
+                            }}
+                        />
+                    </div>
+                )}
+                
                 <div
                     className={
                         selectedBowl?.image_url
@@ -109,7 +158,6 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
                         />
                     )}
                 </div>
-                {/* Dividers and slots always render above */}
                 {selectedBowl && (selectedBowl.slot_count === 4 || selectedBowl.slot_count === 6) && (
                     <img
                         src={selectedBowl.slot_count === 4 ? DIVIDER_4 : DIVIDER_6}
