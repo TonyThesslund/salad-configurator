@@ -85,3 +85,5 @@ export const SummaryBar: React.FC = () => {
 };
 
 export default SummaryBar;
+
+// oli valmiina jo
