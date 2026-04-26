@@ -26,6 +26,10 @@ export function BaseSelection({ bases }: BaseSelectionProps) {
       name: base.name,
       categoryId: base.categoryId,
       price: base.price ?? 0,
+      weight_grams: base.weight_grams,
+      image_url: base.image_url,
+      wedge_image_url: base.wedge_image_url,
+      barcode_url: base.barcode_url,
     };
 
     addIngredient(mappedBase);
