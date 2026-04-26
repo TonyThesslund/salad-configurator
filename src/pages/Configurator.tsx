@@ -122,7 +122,7 @@ export default function Configurator() {
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
       <div className="flex">
         <BowlSelection bowls={bowls} />
-        <CenterBowl onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} />
+        <CenterBowl onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} baseIngredients={saladBases} />
         <BaseSelection bases={bases} />
       </div>
 
