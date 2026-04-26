@@ -29,8 +29,8 @@ const SLOT_POSITIONS_4 = [
 export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
     const { slots, selectedBowl, clearSelection, clearSlot } = useIngredientStore();
 
-    const DIVIDER_4 = "https://www.cc.puv.fi/~asa/fresh/images/jakaja_4_lohkoa.png";
-    const DIVIDER_6 = "https://www.cc.puv.fi/~asa/fresh/images/jakaja_6_lohkoa.png";
+    const DIVIDER_4 = "src/assets/icons/divider_4.png";
+    const DIVIDER_6 = "src/assets/icons/divider_6.png";
 
     const setBaseType = useIngredientStore((state) => state.setBaseType);
     const baseType = useIngredientStore((state) => state.baseType);
@@ -77,32 +77,49 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
             </div>
 
 
-            <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 flex items-center justify-center shadow-inner relative overflow-hidden">
-                {selectedBowl?.image_url ? (
+
+            <div className="relative w-80 h-80 flex items-center justify-center">
+                {selectedBowl?.image_url && (
                     <img
                         src={selectedBowl.image_url}
                         alt={selectedBowl.shape + ' bowl'}
-                        className="absolute inset-0 w-full h-full object-contain z-10"
-                        style={{ background: '#f4f4f4' }}
+                        className={
+                            selectedBowl.shape === 'square'
+                                ? 'absolute inset-0 w-80 h-80 object-contain z-30 pointer-events-none select-none rounded-3xl'
+                                : 'absolute inset-0 w-80 h-80 object-contain z-30 pointer-events-none select-none rounded-full'
+                        }
                     />
-                ) : base?.image_url ? (
-                    <img
-                        src={base.image_url}
-                        alt={base.name}
-                        className="absolute inset-0 w-full h-full object-cover z-10"
-                    />
-                ) : null}
-
+                )}
+                <div
+                    className={
+                        selectedBowl?.image_url
+                            ? selectedBowl.shape === 'square'
+                                ? 'w-80 h-80 rounded-3xl absolute inset-0 z-10 opacity-0'
+                                : 'w-80 h-80 rounded-full absolute inset-0 z-10 opacity-0'
+                            : 'w-80 h-80 ' +
+                                (selectedBowl?.shape === 'square' ? 'rounded-3xl' : 'rounded-full') +
+                                ' border-[12px] border-gray-200 bg-gray-50 flex items-center justify-center shadow-inner relative overflow-hidden z-10'
+                    }
+                >
+                    {!selectedBowl?.image_url && base?.image_url && (
+                        <img
+                            src={base.image_url}
+                            alt={base.name}
+                            className="absolute inset-0 w-full h-full object-cover z-10"
+                        />
+                    )}
+                </div>
+                {/* Dividers and slots always render above */}
                 {selectedBowl && (selectedBowl.slot_count === 4 || selectedBowl.slot_count === 6) && (
                     <img
                         src={selectedBowl.slot_count === 4 ? DIVIDER_4 : DIVIDER_6}
                         alt=""
                         aria-hidden="true"
-                        className="absolute inset-0 w-full h-full object-contain z-20 pointer-events-none"
+                        className="absolute inset-0 w-80 h-80 object-contain z-40 pointer-events-none"
+                        style={{ borderRadius: '50%' }}
                     />
                 )}
-
-                <div className="absolute inset-0 z-30">
+                <div className="absolute inset-0 z-50">
                     {activeSlots.map(([slotKey, ingredient], index) => {
                         const positions = selectedBowl?.slot_count === 4 ? SLOT_POSITIONS_4 : SLOT_POSITIONS_6;
                         const pos = positions[index] ?? positions[0];
@@ -131,7 +148,7 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
                 </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-6 mt-4">
                 <p>100g / 1,99€</p>
                 <p>{selectedBowl ? selectedBowl.volume : 0} ml</p>
             </div>
