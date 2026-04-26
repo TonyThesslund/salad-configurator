@@ -7,6 +7,7 @@ interface Props {
 
 export function BowlSelection({ bowls }: Props) {
   const setBowl = useIngredientStore((state) => state.setBowl);
+  const selectedBowl = useIngredientStore((state) => state.selectedBowl);
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
@@ -17,28 +18,36 @@ export function BowlSelection({ bowls }: Props) {
 
       <h2 className="mb-6 font-semibold text-lg">Valitse rasia</h2>
 
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-3">
         {bowls.map((bowl) => (
           <button
             key={bowl.id}
             type="button"
             onClick={() => setBowl(bowl)}
-            className="h-16 border-2 border-gray-600 rounded-xl flex items-center gap-3 px-3 hover:border-[#A2D135] hover:text-[#A2D135] transition"
+            className="w-full h-16 rounded-xl flex items-center gap-4 px-1 text-left transition-colors"
           >
             {bowl.image_url ? (
               <img
                 src={bowl.image_url}
                 alt={bowl.name}
-                className="w-10 h-10 rounded-md object-cover shrink-0 bg-white"
+                className="w-14 h-14 object-contain shrink-0"
                 loading="lazy"
               />
             ) : (
               <span
                 aria-hidden="true"
-                className="w-10 h-10 rounded-md bg-zinc-700 border border-zinc-500 shrink-0"
+                className="w-14 h-14 rounded-full bg-zinc-700 border border-zinc-500 shrink-0"
               />
             )}
-            <span>{bowl.name}</span>
+            <span
+              className={
+                selectedBowl?.id === bowl.id
+                  ? "text-[#A2D135]"
+                  : "text-zinc-100"
+              }
+            >
+              {bowl.name}
+            </span>
           </button>
         ))}
       </div>
