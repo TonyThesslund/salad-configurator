@@ -76,14 +76,22 @@ export function CenterBowl({ onOpenSaveModal }: CenterBowlProps) {
                 </button>
             </div>
 
+
             <div className="w-80 h-80 rounded-full border-[12px] border-gray-200 bg-gray-50 flex items-center justify-center shadow-inner relative overflow-hidden">
-                {base?.image_url && (
+                {selectedBowl?.image_url ? (
+                    <img
+                        src={selectedBowl.image_url}
+                        alt={selectedBowl.shape + ' bowl'}
+                        className="absolute inset-0 w-full h-full object-contain z-10"
+                        style={{ background: '#f4f4f4' }}
+                    />
+                ) : base?.image_url ? (
                     <img
                         src={base.image_url}
                         alt={base.name}
                         className="absolute inset-0 w-full h-full object-cover z-10"
                     />
-                )}
+                ) : null}
 
                 {selectedBowl && (selectedBowl.slot_count === 4 || selectedBowl.slot_count === 6) && (
                     <img
