@@ -23,8 +23,21 @@ export function BowlSelection({ bowls }: Props) {
             key={bowl.id}
             type="button"
             onClick={() => setBowl(bowl)}
-            className="h-12 border-2 border-gray-600 rounded-xl flex items-center px-4 hover:border-[#A2D135] hover:text-[#A2D135] transition"
+            className="h-16 border-2 border-gray-600 rounded-xl flex items-center gap-3 px-3 hover:border-[#A2D135] hover:text-[#A2D135] transition"
           >
+            {bowl.image_url ? (
+              <img
+                src={bowl.image_url}
+                alt={bowl.name}
+                className="w-10 h-10 rounded-md object-cover shrink-0 bg-white"
+                loading="lazy"
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="w-10 h-10 rounded-md bg-zinc-700 border border-zinc-500 shrink-0"
+              />
+            )}
             <span>{bowl.name}</span>
           </button>
         ))}
