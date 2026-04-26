@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useIngredientStore } from '../store/useIngredientStore';
+import { usePriceStore } from '../store/usePriceStore';
+import { calculateTotalWeight, calculateTotalPrice } from '../utils/calculations';
 import type { Ingredient } from '../types';
 import trashIcon from '../assets/icons/trash.svg';
 import undoIcon from '../assets/icons/undo.svg';
@@ -40,6 +42,7 @@ const SLOT_POSITIONS_4 = [
 
 export function CenterBowl({ onOpenSaveModal, baseIngredients }: CenterBowlProps) {
     const { slots, selectedBowl, clearSelection, clearSlot } = useIngredientStore();
+    const prices = usePriceStore((state) => state.prices);
 
     const DIVIDER_4 = "src/assets/icons/divider_4.png";
     const DIVIDER_6 = "src/assets/icons/divider_6.png";
@@ -57,6 +60,10 @@ export function CenterBowl({ onOpenSaveModal, baseIngredients }: CenterBowlProps
     const activeSlots = Object.entries(slots).filter(
         ([key, value]) => key !== 'base' && value !== null
     ) as [string, Ingredient][];
+
+    const allIngredients = base ? [base, ...activeSlots.map(([_, ingredient]) => ingredient)] : activeSlots.map(([_, ingredient]) => ingredient);
+    const totalWeight = calculateTotalWeight(allIngredients);
+    const totalPrice = calculateTotalPrice(allIngredients, prices);
 
     const handleClearBowl = () => {
         const shouldClear = window.confirm('Are you sure you want to empty the bowl?');
@@ -197,7 +204,7 @@ export function CenterBowl({ onOpenSaveModal, baseIngredients }: CenterBowlProps
             </div>
 
             <div className="flex gap-6 mt-4">
-                <p>100g / 1,99€</p>
+                <p>{totalWeight}g / {totalPrice.toFixed(2)}€</p>
                 <p>{selectedBowl ? selectedBowl.volume : 0} ml</p>
             </div>
 

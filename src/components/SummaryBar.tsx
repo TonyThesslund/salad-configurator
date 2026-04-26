@@ -11,13 +11,14 @@ export const SummaryBar: React.FC = () => {
 
     const prices = usePriceStore((state) => state.prices);
 
-    const activeIngredients = Object.values(slots).filter(
-        (i): i is Ingredient => i !== null
-    );
+    const base = slots.base as Ingredient | null;
+    const toppings: Ingredient[] = Object.entries(slots)
+        .filter(([key, value]) => key !== 'base' && value !== null)
+        .map(([_, value]) => value as Ingredient);
+    const allIngredients: Ingredient[] = base ? [base, ...toppings] : toppings;
 
-    const totalWeight = calculateTotalWeight(activeIngredients);
-
-    const totalPrice = calculateTotalPrice(activeIngredients, prices);
+    const totalWeight = calculateTotalWeight(allIngredients);
+    const totalPrice = calculateTotalPrice(allIngredients, prices);
 
     return (
         <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
@@ -27,15 +28,15 @@ export const SummaryBar: React.FC = () => {
                 <div className="mb-4 flex items-center justify-between gap-3">
                     <h3 className="text-lg font-semibold">Valitut ainesosat</h3>
                     <span className="rounded-full bg-zinc-200 px-4 py-1 text-sm font-semibold text-black">
-                        {activeIngredients.length} kpl
+                        {toppings.length} kpl
                     </span>
                 </div>
                 
-                {activeIngredients.length === 0 ? (
+                {toppings.length === 0 ? (
                     <p className="text-zinc-400">Ei valittuja ainesosia</p>
                 ) : (
                     <ul className="space-y-2">
-                        {activeIngredients.map((item) => (
+                        {toppings.map((item: Ingredient) => (
                             <li 
                                 key={item.id} 
                                 className="flex items-center justify-between text-sm bg-zinc-700 rounded-xl px-4 py-2"

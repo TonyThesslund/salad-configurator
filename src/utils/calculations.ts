@@ -1,8 +1,8 @@
 import type { PriceListItem } from "../store/usePriceStore";
 
-export function calculateTotalPrice(ingredients: Ingredient[], prices: PriceListItem[]): number {
+export function calculateTotalPrice(ingredients: Ingredient[], prices: any[]): number {
   return ingredients.reduce((sum, item) => {
-    const priceItem = prices.find((p) => p.id === item.id);
+    const priceItem = prices.find((p) => (p.id === item.id || p.item_id === item.id));
     return sum + (priceItem ? priceItem.price : 0);
   }, 0);
 }
