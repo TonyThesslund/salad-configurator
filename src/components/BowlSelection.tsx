@@ -7,6 +7,7 @@ interface Props {
 
 export function BowlSelection({ bowls }: Props) {
   const setBowl = useIngredientStore((state) => state.setBowl);
+  const selectedBowlId = useIngredientStore((state) => state.slots.bowl?.id);
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
@@ -23,7 +24,11 @@ export function BowlSelection({ bowls }: Props) {
             key={bowl.id}
             type="button"
             onClick={() => setBowl(bowl)}
-            className="h-12 border-2 border-gray-600 rounded-xl flex items-center px-4 hover:border-[#A2D135] hover:text-[#A2D135] transition"
+            className={`h-12 border-2 rounded-xl flex items-center px-4 transition ${
+              selectedBowlId === bowl.id
+              ? "border-[#A2D135] text-[#A2D135]"
+              : "border-gray-600 hover:border-[#A2D135] hover:text-[#A2D135]"
+            }`}
           >
             <span>{bowl.name}</span>
           </button>
