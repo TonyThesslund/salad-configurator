@@ -76,6 +76,23 @@ export function IngredientSelection({
           <IngredientCard key={ingredient.id} ingredient={ingredient} />
         ))}
       </div>
+
+      <div className="mt-8 flex justify-center gap-6 text-sm text-zinc-300">
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-[#A2D135]">G</span>
+          <span>Gluteeniton</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-[#A2D135]">L</span>
+          <span>Laktoositon</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="font-bold text-[#A2D135]">V</span>
+          <span>Vegaaninen</span>
+        </div>
+      </div>
     </div>
   );
 }
