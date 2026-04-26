@@ -5,6 +5,16 @@ interface Props {
   bowls: Bowl[];
 }
 
+function getBowlLabel(bowl: Bowl) {
+  const shapeLabel = bowl.shape === "square" ? "Neliö" : "Ympyrä";
+
+  if (!bowl.volume) {
+    return shapeLabel;
+  }
+
+  return `${shapeLabel} ${bowl.volume} ml`;
+}
+
 export function BowlSelection({ bowls }: Props) {
   const setBowl = useIngredientStore((state) => state.setBowl);
   const selectedBowl = useIngredientStore((state) => state.selectedBowl);
@@ -46,7 +56,7 @@ export function BowlSelection({ bowls }: Props) {
                   : "text-zinc-100"
               }
             >
-              {bowl.name}
+              {getBowlLabel(bowl)}
             </span>
           </button>
         ))}
