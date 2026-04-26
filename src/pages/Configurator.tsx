@@ -48,10 +48,10 @@ export default function Configurator() {
   const [saladBases, setSaladBases] = useState<BaseIngredient[]>([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
-  const [isSaveRecipeModalOpen, setIsSaveRecipeModalOpen] = useState(false);
+  const [isSaveRecipeModalOpen, setIsSaveRecipeModalOpen] = useState(false); 
 
   const baseType = useIngredientStore((state) => state.baseType);
-
+  
   useEffect(() => {
     const fetchIngredients = async () => {
       try {
@@ -120,10 +120,36 @@ export default function Configurator() {
 
   return (
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
-      <div className="flex">
+      <div className="flex w-full gap-6 items-stretch">
+        <div className="flex-[1] min-w-[280px] flex">
         <BowlSelection bowls={bowls} />
-        <CenterBowl onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} baseIngredients={saladBases} />
-        <BaseSelection bases={bases} />
+        </div>
+
+        <div className="flex-[2] min-w-0">
+          <CenterBowl 
+          onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} 
+          baseIngredients={saladBases} 
+          />
+        </div>
+
+        <div className="flex-[1] min-w-[280px] flex">
+        {baseType === 2 ? (
+          <div className="bg-zinc-800 rounded-[3rem] pt-3 pb-6 px-3 text-white w-full flex flex-col items-center shadow-lg flex-1 min-h-[464px]">
+            <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center mb-4 shrink-0">
+              2
+            </div>
+
+            <h2 className="mb-6 font-semibold text-lg">Valitse salaattipohja</h2>
+
+            <div className="flex flex-1 items-center justify-center text-sm text-gray-400 text-center px-4">
+              No base options for quark
+            </div>
+          </div>
+        ) : (
+          <BaseSelection bases={bases} />
+        )}
+        </div>
+
       </div>
 
       <IngredientSelection

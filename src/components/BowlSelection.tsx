@@ -20,7 +20,7 @@ export function BowlSelection({ bowls }: Props) {
   const selectedBowl = useIngredientStore((state) => state.selectedBowl);
 
   return (
-    <div className="bg-zinc-800 rounded-[3rem] pt-3 pb-6 px-3 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
+    <div className="bg-zinc-800 rounded-[3rem] pt-3 pb-6 px-3 text-white w-full flex flex-col items-center shadow-lg">
       
       <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center mb-4 shrink-0">
         1
