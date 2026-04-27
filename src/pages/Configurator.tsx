@@ -46,6 +46,8 @@ export default function Configurator() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [saladBases, setSaladBases] = useState<BaseIngredient[]>([]);
+
+  const [isLoadingInitial, setIsLoadingInitial] = useState(true);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
   const [isSaveRecipeModalOpen, setIsSaveRecipeModalOpen] = useState(false); 
@@ -53,55 +55,44 @@ export default function Configurator() {
   const baseType = useIngredientStore((state) => state.baseType);
   
   useEffect(() => {
-    const fetchIngredients = async () => {
+    const fetchInitialData = async () => {
+      setIsLoadingInitial(true);
       try {
-        const data = await getIngredients<Ingredient[]>();
-        setIngredients(data);
+        await Promise.all([
+          getIngredients<Ingredient[]>().then(setIngredients),
+          getBaseIngredients<BaseIngredient[]>().then(setSaladBases),
+        ]);
       } catch (err) {
-        console.error("Failed to fetch ingredients:", err);
+        console.error("Failed to fetch initial data:", err);
+      } finally {
+        setIsLoadingInitial(false);
       }
     };
 
-    const fetchSaladBases = async () => {
-      try {
-        const data = await getBaseIngredients<BaseIngredient[]>();
-        setSaladBases(data);
-      } catch (err) {
-        console.error("Failed to fetch base ingredients:", err);
-      }
-    };
-
-    fetchIngredients();
-    fetchSaladBases();
+    fetchInitialData();
   }, []);
 
   useEffect(() => {
-    const fetchBowls = async () => {
-      try {
-        const data = await getBowls<Bowl[]>(baseType);
-        setBowls(data);
-      } catch (error) {
-        console.error("Failed to fetch bowls:", error);
-      }
-    };
-
-    const fetchCategories = async () => {
+    const fetchContextualData = async () => {
       setIsLoadingCategories(true);
       setCategoriesError(null);
 
       try {
-        const data = await getCategories<Category[]>(baseType);
-        setCategories(data);
+        const [bowlsData, categoriesData] = await Promise.all([
+          getBowls<Bowl[]>(baseType),
+          getCategories<Category[]>(baseType)
+        ]);
+        setBowls(bowlsData);
+        setCategories(categoriesData);
       } catch (err) {
-        console.error("Failed to fetch categories:", err);
+        console.error("Failed to fetch contextual data:", err);
         setCategoriesError("Failed to fetch categories");
       } finally {
         setIsLoadingCategories(false);
       }
     };
 
-    fetchBowls();
-    fetchCategories();
+    fetchContextualData();
   }, [baseType]);
 
   const bases = useMemo<BaseIngredient[]>(() => {
@@ -117,6 +108,15 @@ export default function Configurator() {
         price: ing.price,
       }));
   }, [baseType, saladBases, ingredients]);
+
+  if (isLoadingInitial) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] gap-4">
+        <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+        <p className="text-lg font-medium text-gray-600">Ladataan...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
