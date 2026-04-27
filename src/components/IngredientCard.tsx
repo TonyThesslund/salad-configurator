@@ -30,11 +30,10 @@ export const IngredientCard = ({ ingredient }: Props) => {
   return (
     <div
       onClick={() => addIngredient(ingredient)}
-         className="flex w-60 h-16 rounded-2xl overflow-hidden shadow bg-zinc-900 cursor-pointer transition group hover:shadow-lg hover:scale-102 hover:z-10"
-      style={{ minWidth: 220, maxWidth: 260 }}
+         className="flex rounded-2xl overflow-hidden shadow bg-zinc-900 cursor-pointer transition group hover:shadow-lg hover:scale-102 hover:z-10"
     >
       {/* Image section */}
-      <div className="w-20 h-full flex-shrink-0 bg-zinc-800">
+      <div className="w-[30%] h-full flex-shrink-0 bg-zinc-800">
         {ingredient.image_url ? (
           <img
             src={ingredient.image_url}
@@ -47,8 +46,8 @@ export const IngredientCard = ({ ingredient }: Props) => {
         )}
       </div>
       {/* Info section */}
-      <div className="flex-1 flex flex-col justify-center px-3 bg-white rounded-r-2xl">
-        <div className="font-semibold text-sm text-zinc-900 whitespace-normal leading-tight">
+      <div className="flex-1 flex flex-col justify-center px-3 bg-white rounded-r-2xl min-w-0">
+        <div className="font-semibold text-sm text-zinc-900 whitespace-normal leading-tight break-words">
           {ingredient.name}
         </div>
         <div className="flex items-center gap-2 mt-1">
