@@ -8,6 +8,7 @@ interface Ingredient {
   categoryId: number;
   price: number;
   diets?: string[];
+  image_url?: string;
 }
 
 interface Props {
@@ -29,41 +30,49 @@ export const IngredientCard = ({ ingredient }: Props) => {
   return (
     <div
       onClick={() => addIngredient(ingredient)}
-      className="w-30 h-17 border rounded-md shadow-sm p-2 flex flex-col justify-between items-center hover:shadow-md transition cursor-pointer"
+         className="flex w-60 h-14 rounded-2xl overflow-hidden shadow bg-zinc-900 cursor-pointer transition group hover:shadow-lg hover:scale-102 hover:z-10"
+      style={{ minWidth: 220, maxWidth: 260 }}
     >
-      {/* Nimi */}
-      <div className="text-xs font-semibold text-center break-words">
-        {ingredient.name}
-      </div>
-
-      <div className="text-[0.65rem] font-semibold text-center">
-        {token ? (
-          priceItem ? (
-            <span className="text-green-600">
-              + {priceItem.price} €
-            </span>
-          ) : (
-            <span className="text-gray-400">
-              No price
-            </span>
-          )
+      {/* Image section */}
+      <div className="w-20 h-full flex-shrink-0 bg-zinc-800">
+        {ingredient.image_url ? (
+          <img
+            src={ingredient.image_url}
+            alt={ingredient.name}
+            className="object-cover w-full h-full"
+            loading="lazy"
+          />
         ) : (
-          <span className="text-gray-400">
-            Login to see price
-          </span>
+          <div className="w-full h-full bg-zinc-700 flex items-center justify-center text-xs text-zinc-400">No Image</div>
         )}
       </div>
-
-      {/* Diet labels */}
-      <div className="flex justify-center gap-1 flex-wrap">
-        {ingredient.diets?.map((diet) => (
-          <span
-            key={diet}
-            className="text-[0.6rem] bg-green-100 text-green-700 px-1 py-0.5 rounded"
-          >
-            {diet}
+      {/* Info section */}
+      <div className="flex-1 flex flex-col justify-center px-3 bg-white rounded-r-2xl">
+        <div className="font-semibold text-sm text-zinc-900 whitespace-normal leading-tight">
+          {ingredient.name}
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          {/* Price */}
+          <span className="text-xs font-semibold text-green-600">
+            {token
+              ? priceItem
+                ? `+ ${priceItem.price} €`
+                : <span className="text-gray-400">No price</span>
+              : <span className="text-gray-400">Login to see price</span>
+            }
           </span>
-        ))}
+          {/* Diet labels */}
+          <div className="flex gap-1 flex-wrap">
+            {ingredient.diets?.map((diet) => (
+              <span
+                key={diet}
+                className="text-[0.6rem] bg-green-100 text-green-700 px-1 py-0.5 rounded"
+              >
+                {diet}
+              </span>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
