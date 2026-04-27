@@ -43,7 +43,7 @@ export function IngredientSelection({
         placeholder="Etsi tuotteita"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="rounded-full px-6 py-3 text-black outline-none w-64 border-2 border-transparent focus:border-[#A2D135]"
+        className="rounded-full px-6 py-3 text-white outline-none w-64 border-2 focus:border-[#A2D135]"
       />
 
       {isLoadingCategories && (
