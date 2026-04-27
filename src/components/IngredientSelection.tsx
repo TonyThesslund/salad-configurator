@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useIngredientStore } from "../store/useIngredientStore";
 import { IngredientCard } from "./IngredientCard";
 
 interface Ingredient {
@@ -12,6 +13,7 @@ interface Ingredient {
 interface Category {
   id: number;
   name: string;
+  base_type_id?: number;
 }
 
 interface Props {
@@ -27,12 +29,23 @@ export function IngredientSelection({
   isLoadingCategories = false,
   categoriesError = null,
 }: Props) {
+
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const baseType = useIngredientStore((state) => state.baseType);
 
-  const filteredCategories = categories.filter((cat) => cat.id !== 6);
+  // Filter categories by baseType
+  const filteredCategories = categories.filter(
+    (cat) => cat.id !== 6 && (cat.base_type_id === undefined || cat.base_type_id === baseType)
+  );
+
+  // Filter ingredients by baseType through their category
   const filteredIngredients = ingredients
     .filter((ingredient) => ingredient.categoryId !== 6)
+    .filter((ingredient) => {
+      const category = categories.find((cat) => cat.id === ingredient.categoryId);
+      return category && (category.base_type_id === undefined || category.base_type_id === baseType);
+    })
     .filter((ingredient) => activeCategory === null || ingredient.categoryId === activeCategory)
     .filter((ingredient) => ingredient.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
