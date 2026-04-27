@@ -51,6 +51,14 @@ export function IngredientSelection({
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full shadow-lg">
+
+      <div className="flex items-center justify-center mb-8 gap-3">
+        <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+          3
+        </div>
+        <h2 className="font-semibold text-lg">Lisää raaka-aineet</h2>
+      </div>
+
       <div className="flex items-center bg-zinc-100 rounded-full px-4 py-2 w-64 mb-2">
         <img src="/src/assets/icons/magnifying-glass.svg" alt="Etsi" className="w-5 h-5 opacity-40 mr-2" />
         <input
