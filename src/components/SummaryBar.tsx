@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useIngredientStore } from "../store/useIngredientStore";
 import { usePriceStore } from "../store/usePriceStore";
 import type { Ingredient } from "../types";
-import { calculateTotalWeight } from "../utils/calculations";
+import { calculateTotalWeight, calculateTotalPrice } from "../utils/calculations";
 
 export const SummaryBar: React.FC = () => {
     const slots = useIngredientStore((state) => state.slots);
@@ -11,19 +11,14 @@ export const SummaryBar: React.FC = () => {
 
     const prices = usePriceStore((state) => state.prices);
 
-    const activeIngredients = Object.values(slots).filter(
-        (i): i is Ingredient => i !== null
-    );
+    const base = slots.base as Ingredient | null;
+    const toppings: Ingredient[] = Object.entries(slots)
+        .filter(([key, value]) => key !== 'base' && value !== null)
+        .map(([_, value]) => value as Ingredient);
+    const allIngredients: Ingredient[] = base ? [base, ...toppings] : toppings;
 
-    const totalWeight = calculateTotalWeight(activeIngredients);
-
-    const totalPrice = activeIngredients.reduce((sum, item) => {
-        const priceItem = prices.find(
-            (p: any) => p.item_id === item.id
-        );
-        
-        return sum + (priceItem ? priceItem.price : 0);
-    }, 0);
+    const totalWeight = calculateTotalWeight(allIngredients);
+    const totalPrice = calculateTotalPrice(allIngredients, prices);
 
     return (
         <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full flex flex-col md:flex-row gap-8 shadow-xl">
@@ -33,20 +28,23 @@ export const SummaryBar: React.FC = () => {
                 <div className="mb-4 flex items-center justify-between gap-3">
                     <h3 className="text-lg font-semibold">Valitut ainesosat</h3>
                     <span className="rounded-full bg-zinc-200 px-4 py-1 text-sm font-semibold text-black">
-                        {activeIngredients.length} kpl
+                        {allIngredients.length} kpl
                     </span>
                 </div>
                 
-                {activeIngredients.length === 0 ? (
+                {allIngredients.length === 0 ? (
                     <p className="text-zinc-400">Ei valittuja ainesosia</p>
                 ) : (
                     <ul className="space-y-2">
-                        {activeIngredients.map((item) => (
+                        {allIngredients.map((item: Ingredient) => {
+                        const price = prices.find(p => p.id === item.id)?.price;
+                        
+                        return (
                             <li 
                                 key={item.id} 
                                 className="flex items-center justify-between text-sm bg-zinc-700 rounded-xl px-4 py-2"
                             >
-                                <span>{item.name}</span>
+                                <span>{item.name} - {(price ?? 0).toFixed(2)} €</span>
                                 <button
                                     onClick={() => removeIngredient(item.id)}
                                     className="text-red-400 hover:text-red-300 text-lg leading-none w-6 h-6 flex items-center justify-center hover:bg-zinc-600 rounded-full transition-colors"
@@ -54,7 +52,8 @@ export const SummaryBar: React.FC = () => {
                                     ×
                                 </button>
                             </li>
-                        ))}
+                        );
+                        })}
                     </ul>
                 )}
             </div>
@@ -85,3 +84,5 @@ export const SummaryBar: React.FC = () => {
 };
 
 export default SummaryBar;
+
+// oli valmiina jo

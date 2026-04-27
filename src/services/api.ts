@@ -10,8 +10,8 @@ async function fetchJson<T>(endpoint: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-export async function getBowls<T = unknown>(): Promise<T> {
-  return fetchJson<T>("bowls");
+export async function getBowls<T = unknown>(typeId: number): Promise<T> {
+  return fetchJson<T>(`bowls?type_id=${typeId}`);
 }
 
 export async function getBaseIngredients<T = unknown>(): Promise<T> {

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import closeMenuIcon from '../assets/icons/close_menu.svg';
 
 type ModalProps = {
@@ -27,7 +28,7 @@ function Modal({ isOpen, onClose, children }: ModalProps) {
 
 	if (!isOpen) return null;
 
-	return (
+	return createPortal(
 		<div
 			className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
 			role="presentation"
@@ -53,7 +54,8 @@ function Modal({ isOpen, onClose, children }: ModalProps) {
 				</button>
 				{children}
 			</div>
-		</div>
+		</div>,
+		document.body
 	);
 }
 

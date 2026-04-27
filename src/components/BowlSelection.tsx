@@ -5,11 +5,22 @@ interface Props {
   bowls: Bowl[];
 }
 
+function getBowlLabel(bowl: Bowl) {
+  const shapeLabel = bowl.shape === "square" ? "Neliö" : "Ympyrä";
+
+  if (!bowl.volume) {
+    return shapeLabel;
+  }
+
+  return `${shapeLabel} ${bowl.volume} ml`;
+}
+
 export function BowlSelection({ bowls }: Props) {
   const setBowl = useIngredientStore((state) => state.setBowl);
+  const selectedBowl = useIngredientStore((state) => state.selectedBowl);
 
   return (
-    <div className="bg-zinc-800 rounded-[3rem] p-6 text-white w-full lg:w-1/4 flex flex-col items-center shadow-lg">
+    <div className="bg-zinc-800 rounded-[3rem] pt-3 pb-6 px-3 text-white w-full flex flex-col items-center shadow-lg">
       
       <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center mb-4 shrink-0">
         1
@@ -17,15 +28,36 @@ export function BowlSelection({ bowls }: Props) {
 
       <h2 className="mb-6 font-semibold text-lg">Valitse rasia</h2>
 
-      <div className="w-full flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-3">
         {bowls.map((bowl) => (
           <button
             key={bowl.id}
             type="button"
             onClick={() => setBowl(bowl)}
-            className="h-12 border-2 border-gray-600 rounded-xl flex items-center px-4 hover:border-[#A2D135] hover:text-[#A2D135] transition"
+            className="w-full h-16 rounded-xl flex items-center gap-4 px-1 text-left transition-colors"
           >
-            <span>{bowl.name}</span>
+            {bowl.image_url ? (
+              <img
+                src={bowl.image_url}
+                alt={bowl.name}
+                className="w-14 h-14 object-contain shrink-0"
+                loading="lazy"
+              />
+            ) : (
+              <span
+                aria-hidden="true"
+                className="w-14 h-14 rounded-full bg-zinc-700 border border-zinc-500 shrink-0"
+              />
+            )}
+            <span
+              className={
+                selectedBowl?.id === bowl.id
+                  ? "text-[#A2D135]"
+                  : "text-zinc-100"
+              }
+            >
+              {getBowlLabel(bowl)}
+            </span>
           </button>
         ))}
       </div>

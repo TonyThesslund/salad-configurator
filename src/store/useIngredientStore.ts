@@ -10,14 +10,15 @@ export interface IngredientStoreState {
     clearSelection: () => void;
     addIngredient: (item: Ingredient) => void;
     removeIngredient: (id: number) => void;
+    clearSlot: (slotId: string) => void;
 }
 
 export const useIngredientStore = create<IngredientStoreState>((set) => ({
     slots: {},
     baseType: 1,
     selectedBowl: null,
-    setBaseType: (id) => set({ baseType: id, selectedBowl: null, slots: {},}),
-    setBowl: (bowl) => set({ selectedBowl: bowl, slots: {},}),
+    setBaseType: (id) => set({ baseType: id, selectedBowl: null, slots: {} }),
+    setBowl: (bowl) => set({ selectedBowl: bowl, slots: {} }),
     clearSelection: () => set({ slots: {}, selectedBowl: null }),
 
     addIngredient: (item) => {
@@ -26,8 +27,8 @@ export const useIngredientStore = create<IngredientStoreState>((set) => ({
                 return {
                     slots: {
                         ...state.slots,
-                        "base": item
-                    }
+                        base: item,
+                    },
                 };
             }
 
@@ -61,6 +62,14 @@ export const useIngredientStore = create<IngredientStoreState>((set) => ({
             }
             return { slots: newSlots };
         });
+    },
 
+    clearSlot: (slotId) => {
+        set((state) => ({
+            slots: {
+                ...state.slots,
+                [slotId]: null,
+            },
+        }));
     },
 }));
