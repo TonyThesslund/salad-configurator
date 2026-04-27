@@ -13,6 +13,7 @@ import { CenterBowl } from "../components/CenterBowl";
 import { IngredientSelection } from "../components/IngredientSelection";
 import { SaveRecipeModal } from "../components/SaveRecipeModal";
 import { SummaryBar } from "../components/SummaryBar";
+import { CenterControls } from "../components/CenterControls";
 
 import { useIngredientStore } from "../store/useIngredientStore";
 import type { Bowl } from "../types";
@@ -50,7 +51,16 @@ export default function Configurator() {
   const [isLoadingInitial, setIsLoadingInitial] = useState(true);
   const [isLoadingCategories, setIsLoadingCategories] = useState(true);
   const [categoriesError, setCategoriesError] = useState<string | null>(null);
-  const [isSaveRecipeModalOpen, setIsSaveRecipeModalOpen] = useState(false); 
+  const [isSaveRecipeModalOpen, setIsSaveRecipeModalOpen] = useState(false);
+
+  // Clear bowl handler for CenterControls
+  const clearSelection = useIngredientStore((state) => state.clearSelection);
+  const handleClearBowl = () => {
+    const shouldClear = window.confirm('Are you sure you want to empty the bowl?');
+    if (shouldClear) {
+      clearSelection();
+    }
+  };
 
   const baseType = useIngredientStore((state) => state.baseType);
   
@@ -120,6 +130,7 @@ export default function Configurator() {
 
   return (
     <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
+      <CenterControls onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} handleClearBowl={handleClearBowl} />
       <div className="flex w-full gap-6 items-stretch">
         <div className="flex-[1] min-w-[280px] flex">
         <BowlSelection bowls={bowls} />
@@ -127,8 +138,7 @@ export default function Configurator() {
 
         <div className="flex-[2] min-w-0">
           <CenterBowl 
-          onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} 
-          baseIngredients={saladBases} 
+            baseIngredients={saladBases} 
           />
         </div>
 

@@ -3,9 +3,6 @@ import { useIngredientStore } from '../store/useIngredientStore';
 import { usePriceStore } from '../store/usePriceStore';
 import { calculateTotalWeight, calculateTotalPrice } from '../utils/calculations';
 import type { Ingredient } from '../types';
-import trashIcon from '../assets/icons/trash.svg';
-import undoIcon from '../assets/icons/undo.svg';
-import saveIcon from '../assets/icons/save.svg';
 import SaveRecipeModal from './SaveRecipeModal';
 
 interface BaseIngredient {
@@ -20,7 +17,6 @@ interface BaseIngredient {
 }
 
 interface CenterBowlProps {
-    onOpenSaveModal: () => void;
     baseIngredients: BaseIngredient[];
 }
 
@@ -40,15 +36,13 @@ const SLOT_POSITIONS_4 = [
     { top: '50%', left: '22%', transform: 'translate(-50%, -50%)' },
 ];
 
-export function CenterBowl({ onOpenSaveModal, baseIngredients }: CenterBowlProps) {
-    const { slots, selectedBowl, clearSelection, clearSlot } = useIngredientStore();
+export function CenterBowl({ baseIngredients }: CenterBowlProps) {
+    const { slots, selectedBowl, clearSlot } = useIngredientStore();
     const prices = usePriceStore((state) => state.prices);
 
     const DIVIDER_4 = "src/assets/icons/divider_4.png";
     const DIVIDER_6 = "src/assets/icons/divider_6.png";
 
-    const setBaseType = useIngredientStore((state) => state.setBaseType);
-    const baseType = useIngredientStore((state) => state.baseType);
 
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
@@ -65,39 +59,11 @@ export function CenterBowl({ onOpenSaveModal, baseIngredients }: CenterBowlProps
     const totalWeight = calculateTotalWeight(allIngredients);
     const totalPrice = calculateTotalPrice(allIngredients, prices);
 
-    const handleClearBowl = () => {
-        const shouldClear = window.confirm('Are you sure you want to empty the bowl?');
-        if (shouldClear) {
-            clearSelection();
-        }
-    };
+
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[400px] bg-white py-8">
-            {/* Top controls */}
-            <div className="flex gap-4 mb-8 items-center justify-center">
-                <button
-                    onClick={() => setBaseType(1)}
-                    className={`px-6 py-2 rounded-full font-semibold text-black shadow-sm transition border-2 ${baseType === 1 ? 'bg-[#C7E541] border-[#A2D135]' : 'bg-white border-zinc-200 hover:bg-zinc-100'}`}
-                >
-                    Salaatti
-                </button>
-                <button
-                    onClick={() => setBaseType(2)}
-                    className={`px-6 py-2 rounded-full font-semibold text-black shadow-sm transition border-2 ${baseType === 2 ? 'bg-[#C7E541] border-[#A2D135]' : 'bg-white border-zinc-200 hover:bg-zinc-100'}`}
-                >
-                    Rahka
-                </button>
-                <button type="button" onClick={handleClearBowl} className="rounded-full bg-zinc-200 hover:bg-zinc-300 w-10 h-10 flex items-center justify-center shadow-sm transition" aria-label="Empty bowl">
-                    <img src={trashIcon} alt="" aria-hidden="true" className="w-5 h-5" />
-                </button>
-                <button type="button" onClick={() => alert('Feature coming soon!')} className="rounded-full bg-zinc-200 hover:bg-zinc-300 w-10 h-10 flex items-center justify-center shadow-sm transition" aria-label="Undo">
-                    <img src={undoIcon} alt="" aria-hidden="true" className="w-5 h-5" />
-                </button>
-                <button type="button" onClick={onOpenSaveModal} className="rounded-full bg-zinc-200 hover:bg-zinc-300 w-10 h-10 flex items-center justify-center shadow-sm transition" aria-label="Save">
-                    <img src={saveIcon} alt="" aria-hidden="true" className="w-5 h-5" />
-                </button>
-            </div>
+
 
 
 
