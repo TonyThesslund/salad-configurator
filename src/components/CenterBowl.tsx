@@ -4,6 +4,9 @@ import { usePriceStore } from '../store/usePriceStore';
 import { calculateTotalWeight, calculateTotalPrice } from '../utils/calculations';
 import type { Ingredient } from '../types';
 import SaveRecipeModal from './SaveRecipeModal';
+import DIVIDER_4 from "../assets/icons/divider_4.png";
+import DIVIDER_6 from "../assets/icons/divider_6.png";
+
 
 interface BaseIngredient {
     id: number;
@@ -43,8 +46,7 @@ export function CenterBowl({ baseIngredients }: CenterBowlProps) {
     const { slots, selectedBowl, clearSlot } = useIngredientStore();
     const prices = usePriceStore((state) => state.prices);
 
-    const DIVIDER_4 = "src/assets/icons/divider_4.png";
-    const DIVIDER_6 = "src/assets/icons/divider_6.png";
+
 
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 

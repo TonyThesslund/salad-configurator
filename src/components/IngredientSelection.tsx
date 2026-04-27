@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useIngredientStore } from "../store/useIngredientStore";
 import { IngredientCard } from "./IngredientCard";
+import MagnifyingGlassIcon from '../assets/icons/magnifying-glass.svg';
 
 interface Ingredient {
   id: number;
@@ -67,7 +68,7 @@ export function IngredientSelection({
 
       <div className="flex items-center mb-2">
         <div className="flex items-center bg-zinc-100 rounded-full px-4 py-2 w-64">
-          <img src="/src/assets/icons/magnifying-glass.svg" alt="Etsi" className="w-5 h-5 opacity-40 mr-2" />
+          <img src={MagnifyingGlassIcon} alt="Etsi" className="w-5 h-5 opacity-40 mr-2" />
           <input
             id="ingredient-search"
             name="ingredient-search"
