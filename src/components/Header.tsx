@@ -30,7 +30,7 @@ export function Header() {
 
             <img src={fresseLogo} alt="Fresse logo" className="w-28 h-28 object-contain shrink-0" />
 
-            <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 text-3xl font-bold outline-none">
+            <Link to="/salad-configurator" className="absolute left-1/2 transform -translate-x-1/2 text-3xl font-bold outline-none">
                 BOWL-LASKURI
             </Link>
 
