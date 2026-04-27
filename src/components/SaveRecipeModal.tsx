@@ -25,7 +25,7 @@ export function SaveRecipeModal({ isOpen, onClose }: SaveRecipeModalProps) {
 
     const ingredientIds = Object.values(slots)
       .filter((i) => i !== null)
-      .map((i: any) => i.id);
+      .map((i) => i.id);
 
     try {
       await saveRecipe(token!, {
@@ -40,7 +40,7 @@ export function SaveRecipeModal({ isOpen, onClose }: SaveRecipeModalProps) {
       setRecipeName("");
       setIsPublic(false);
       onClose();
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Failed to save recipe:", err);
     }
   };
