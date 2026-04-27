@@ -56,7 +56,7 @@ export function IngredientSelection({
     .filter((ingredient) => ingredient.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
-    <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full shadow-lg min-w-[595px]">
+    <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full shadow-lg">
 
       <div className="flex items-center justify-center mb-8 gap-3">
         <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0">
@@ -107,13 +107,13 @@ export function IngredientSelection({
         ))}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mt-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 mt-6">
         {filteredIngredients.map((ingredient) => (
           <IngredientCard key={ingredient.id} ingredient={ingredient} />
         ))}
       </div>
 
-      <div className="mt-8 flex justify-center gap-6 text-sm text-zinc-300">
+  <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm text-zinc-300">
         <div className="flex items-center gap-2">
           <span className="font-bold bg-[#A2D135] text-black rounded-full w-7 h-7 flex items-center justify-center">G</span>
           <span>Gluteeniton</span>
