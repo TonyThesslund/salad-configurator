@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useIngredientStore } from "../store/useIngredientStore";
 import { IngredientCard } from "./IngredientCard";
 
@@ -33,6 +33,11 @@ export function IngredientSelection({
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const baseType = useIngredientStore((state) => state.baseType);
+
+  // Reset activeCategory to null when baseType changes
+  useEffect(() => {
+    setActiveCategory(null);
+  }, [baseType]);
 
   // Filter categories by baseType
   const filteredCategories = categories.filter(
