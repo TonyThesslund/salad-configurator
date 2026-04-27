@@ -30,7 +30,9 @@ export function Header() {
 
             <img src={fresseLogo} alt="Fresse logo" className="w-28 h-28 object-contain shrink-0" />
 
-            <h1 className="absolute left-1/2 transform -translate-x-1/2 text-3xl font-bold">BOWL-LASKURI</h1>
+            <Link to="/" className="absolute left-1/2 transform -translate-x-1/2 text-3xl font-bold outline-none">
+                BOWL-LASKURI
+            </Link>
 
             <div className="ml-auto flex items-center gap-2 shrink-0 relative">
                 <button

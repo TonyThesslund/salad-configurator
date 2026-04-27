@@ -28,15 +28,15 @@ export const SummaryBar: React.FC = () => {
                 <div className="mb-4 flex items-center justify-between gap-3">
                     <h3 className="text-lg font-semibold">Valitut ainesosat</h3>
                     <span className="rounded-full bg-zinc-200 px-4 py-1 text-sm font-semibold text-black">
-                        {toppings.length} kpl
+                        {allIngredients.length} kpl
                     </span>
                 </div>
                 
-                {toppings.length === 0 ? (
+                {allIngredients.length === 0 ? (
                     <p className="text-zinc-400">Ei valittuja ainesosia</p>
                 ) : (
                     <ul className="space-y-2">
-                        {toppings.map((item: Ingredient) => {
+                        {allIngredients.map((item: Ingredient) => {
                         const price = prices.find(p => p.id === item.id)?.price;
                         
                         return (

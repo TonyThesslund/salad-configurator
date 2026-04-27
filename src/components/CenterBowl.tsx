@@ -20,21 +20,24 @@ interface CenterBowlProps {
     baseIngredients: BaseIngredient[];
 }
 
-const SLOT_POSITIONS_6 = [
-    { top: '15%', left: '50%', transform: 'translate(-50%, 0)' },
-    { top: '25%', left: '75%', transform: 'translate(-50%, 0)' },
-    { top: '55%', left: '75%', transform: 'translate(-50%, 0)' },
-    { top: '65%', left: '50%', transform: 'translate(-50%, 0)' },
-    { top: '55%', left: '25%', transform: 'translate(-50%, 0)' },
-    { top: '25%', left: '25%', transform: 'translate(-50%, 0)' },
-];
+/* ---------------------------------------------
+   Dynamic circular slot positioning
+---------------------------------------------- */
+function generateCircularPositions(count: number) {
+    const radius = 25; // % distance from center
+    const angleOffset = -90; // start at top
 
-const SLOT_POSITIONS_4 = [
-    { top: '20%', left: '50%', transform: 'translate(-50%, 0)' },
-    { top: '50%', left: '78%', transform: 'translate(-50%, -50%)' },
-    { top: '78%', left: '50%', transform: 'translate(-50%, 0)' },
-    { top: '50%', left: '22%', transform: 'translate(-50%, -50%)' },
-];
+    return Array.from({ length: count }, (_, i) => {
+        const angle = angleOffset + (360 / count) * i;
+        const rad = (angle * Math.PI) / 180;
+
+        return {
+            top: `${50 + radius * Math.sin(rad)}%`,
+            left: `${50 + radius * Math.cos(rad)}%`,
+            transform: `translate(-50%, -50%) rotate(${angle + 90}deg)`
+        };
+    });
+}
 
 export function CenterBowl({ baseIngredients }: CenterBowlProps) {
     const { slots, selectedBowl, clearSlot } = useIngredientStore();
@@ -42,7 +45,6 @@ export function CenterBowl({ baseIngredients }: CenterBowlProps) {
 
     const DIVIDER_4 = "src/assets/icons/divider_4.png";
     const DIVIDER_6 = "src/assets/icons/divider_6.png";
-
 
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
 
@@ -55,19 +57,20 @@ export function CenterBowl({ baseIngredients }: CenterBowlProps) {
         ([key, value]) => key !== 'base' && value !== null
     ) as [string, Ingredient][];
 
-    const allIngredients = base ? [base, ...activeSlots.map(([_, ingredient]) => ingredient)] : activeSlots.map(([_, ingredient]) => ingredient);
+    const allIngredients = base
+        ? [base, ...activeSlots.map(([_, ingredient]) => ingredient)]
+        : activeSlots.map(([_, ingredient]) => ingredient);
+
     const totalWeight = calculateTotalWeight(allIngredients);
     const totalPrice = calculateTotalPrice(allIngredients, prices);
 
-
+    const slotCount = selectedBowl?.slot_count || 6;
+    const positions = generateCircularPositions(slotCount);
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[400px] bg-white py-8">
 
-
-
-
-            <div className="relative w-80 h-80 flex items-center justify-center mx-auto">
+            <div className="relative w-80 h-80 flex items-center justify-center mx-auto" style={{ filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.6))' }}>
                 {selectedBowl?.image_url && (
                     <img
                         src={selectedBowl.image_url}
@@ -89,21 +92,20 @@ export function CenterBowl({ baseIngredients }: CenterBowlProps) {
                         }
                         style={{ filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.18))' }}
                     >
-                        {/* Salad base image with edge blur/darkening */}
                         <img
                             src={base.image_url}
                             alt={base.name}
                             className="w-full h-full object-cover"
                             style={{ filter: 'brightness(0.97)' }}
                         />
-                        {/* Edge vignette for base image */}
+
                         <div
                             className="absolute inset-0 pointer-events-none"
                             style={{
                                 background: 'radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.2) 100%)'
                             }}
                         />
-                        {/* Bottom shadow/gradient for base image */}
+
                         <div
                             className="absolute left-0 right-0 bottom-0 h-1/2 pointer-events-none"
                             style={{
@@ -112,7 +114,7 @@ export function CenterBowl({ baseIngredients }: CenterBowlProps) {
                         />
                     </div>
                 )}
-                
+
                 <div
                     className={
                         selectedBowl?.image_url
@@ -132,42 +134,52 @@ export function CenterBowl({ baseIngredients }: CenterBowlProps) {
                         />
                     )}
                 </div>
-                {selectedBowl && (selectedBowl.slot_count === 4 || selectedBowl.slot_count === 6) && (
-                    <img
-                        src={selectedBowl.slot_count === 4 ? DIVIDER_4 : DIVIDER_6}
-                        alt=""
-                        aria-hidden="true"
-                        className="absolute inset-0 w-80 h-80 object-contain z-40 pointer-events-none"
-                        style={{ borderRadius: '50%' }}
-                    />
-                )}
+
                 <div className="absolute inset-0 z-50">
                     {activeSlots.map(([slotKey, ingredient], index) => {
-                        const positions = selectedBowl?.slot_count === 4 ? SLOT_POSITIONS_4 : SLOT_POSITIONS_6;
-                        const pos = positions[index] ?? positions[0];
+                        const pos = positions[index];
+
                         return (
                             <div
                                 key={slotKey}
-                                className="absolute group rounded-full overflow-hidden shadow-md w-14 h-14"
-                                style={{ top: pos.top, left: pos.left, transform: pos.transform }}
+                                className="absolute group w-27 h-37"
+                                style={{
+                                    top: pos.top,
+                                    left: pos.left,
+                                    transform: pos.transform
+                                }}
                             >
                                 <img
                                     src={ingredient.wedge_image_url || ingredient.image_url}
                                     alt={ingredient.name}
                                     className="w-full h-full object-cover"
                                 />
+
                                 <button
                                     onClick={() => clearSlot(slotKey)}
-                                    className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-full gap-1"
+                                    className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                                     aria-label={`Poista ${ingredient.name}`}
                                 >
-                                    <span className="text-white text-xs font-medium leading-tight text-center px-1">{ingredient.name}</span>
-                                    <span className="text-white text-xl font-bold leading-none">×</span>
+                                    <span className="text-white text-xl font-medium leading-tight text-center text-shadow-lg/50 px-1">
+                                        {ingredient.name}
+                                    </span>
+
+                                    <span className="text-red-500 text-6xl text-shadow-lg/50 font-bold leading-none">×</span>
                                 </button>
                             </div>
                         );
                     })}
                 </div>
+
+                {selectedBowl && (slotCount === 4 || slotCount === 6) && (
+                    <img
+                        src={slotCount === 4 ? DIVIDER_4 : DIVIDER_6}
+                        alt=""
+                        aria-hidden="true"
+                        className="absolute inset-0 w-80 h-80 object-contain z-60 pointer-events-none"
+                        style={slotCount === 4 ? { borderRadius: '50%', transform: 'rotate(45deg)' } : { borderRadius: '50%' }}
+                    />
+                )}
             </div>
 
             <div className="flex justify-between w-80 mt-4 text-black text-base font-medium">

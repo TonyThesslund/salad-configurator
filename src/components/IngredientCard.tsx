@@ -66,7 +66,11 @@ export const IngredientCard = ({ ingredient }: Props) => {
             {ingredient.diets?.map((diet) => (
               <span
                 key={diet}
-                className="text-[0.6rem] bg-green-100 text-green-700 px-1 py-0.5 rounded"
+                className={
+                  diet.length > 1
+                    ? "font-bold bg-[#A2D135] text-black rounded-full w-4 h-4 flex items-center justify-center text-[0.6rem]"
+                    : "font-bold bg-[#A2D135] text-black rounded-full w-4 h-4 flex items-center justify-center text-[0.6rem]"
+                }
               >
                 {diet}
               </span>

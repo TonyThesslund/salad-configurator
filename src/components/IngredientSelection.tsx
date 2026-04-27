@@ -103,18 +103,23 @@ export function IngredientSelection({
 
       <div className="mt-8 flex justify-center gap-6 text-sm text-zinc-300">
         <div className="flex items-center gap-2">
-          <span className="font-bold text-[#A2D135]">G</span>
+          <span className="font-bold bg-[#A2D135] text-black rounded-full w-7 h-7 flex items-center justify-center">G</span>
           <span>Gluteeniton</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="font-bold text-[#A2D135]">L</span>
+          <span className="font-bold bg-[#A2D135] text-black rounded-full w-7 h-7 flex items-center justify-center">L</span>
           <span>Laktoositon</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="font-bold text-[#A2D135]">V</span>
-          <span>Vegaaninen</span>
+          <span className="font-bold bg-[#A2D135] text-black rounded-full w-8 h-7 flex items-center justify-center">VL</span>
+          <span>Vähälaktoosinen</span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <span className="font-bold bg-[#A2D135] text-black rounded-full w-7 h-7 flex items-center justify-center">V</span>
+          <span>Soveltuu vegaaniseen ruokavalioon</span>
         </div>
       </div>
     </div>
