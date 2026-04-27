@@ -64,25 +64,29 @@ export function IngredientSelection({
         <h2 className="font-semibold text-lg">Lisää raaka-aineet</h2>
       </div>
 
-      <div className="flex items-center bg-zinc-100 rounded-full px-4 py-2 w-64 mb-2">
-        <img src="/src/assets/icons/magnifying-glass.svg" alt="Etsi" className="w-5 h-5 opacity-40 mr-2" />
-        <input
-          id="ingredient-search"
-          name="ingredient-search"
-          type="text"
-          placeholder="Etsi tuotteita"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="bg-transparent outline-none text-zinc-600 placeholder-zinc-400 flex-1 text-base"
-        />
-      </div>
 
-      {isLoadingCategories && (
-        <p className="mt-4 text-sm text-zinc-300">Loading categories...</p>
-      )}
-      {categoriesError && (
-        <p className="mt-4 text-sm text-red-400">{categoriesError}</p>
-      )}
+      <div className="flex items-center mb-2">
+        <div className="flex items-center bg-zinc-100 rounded-full px-4 py-2 w-64">
+          <img src="/src/assets/icons/magnifying-glass.svg" alt="Etsi" className="w-5 h-5 opacity-40 mr-2" />
+          <input
+            id="ingredient-search"
+            name="ingredient-search"
+            type="text"
+            placeholder="Etsi tuotteita"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-transparent outline-none text-zinc-600 placeholder-zinc-400 flex-1 text-base"
+          />
+        </div>
+        <div className="flex-1 flex justify-end items-center min-h-[32px] ml-4">
+          {isLoadingCategories && (
+            <p className="text-sm text-zinc-300">Loading categories...</p>
+          )}
+          {categoriesError && (
+            <p className="text-sm text-red-400 ml-4">{categoriesError}</p>
+          )}
+        </div>
+      </div>
 
       <div className="flex flex-wrap gap-3 mt-4">
         <button
