@@ -51,13 +51,24 @@ export function IngredientSelection({
 
   return (
     <div className="bg-zinc-800 rounded-[3rem] p-8 text-white w-full shadow-lg">
-      <input
-        type="text"
-        placeholder="Etsi tuotteita"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="rounded-full px-6 py-3 text-white outline-none w-64 border-2 focus:border-[#A2D135]"
-      />
+
+      <div className="flex items-center justify-center mb-8 gap-3">
+        <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center shrink-0">
+          3
+        </div>
+        <h2 className="font-semibold text-lg">Lisää raaka-aineet</h2>
+      </div>
+
+      <div className="flex items-center bg-zinc-100 rounded-full px-4 py-2 w-64 mb-2">
+        <img src="/src/assets/icons/magnifying-glass.svg" alt="Etsi" className="w-5 h-5 opacity-40 mr-2" />
+        <input
+          type="text"
+          placeholder="Etsi tuotteita"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="bg-transparent outline-none text-zinc-600 placeholder-zinc-400 flex-1 text-base"
+        />
+      </div>
 
       {isLoadingCategories && (
         <p className="mt-4 text-sm text-zinc-300">Loading categories...</p>
