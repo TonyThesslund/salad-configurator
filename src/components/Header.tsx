@@ -26,15 +26,21 @@ export function Header() {
 
     return (
         <>
-        <header className="bg-zinc-800 text-white w-full h-32 flex items-center px-8 gap-8 relative">
+        <header className="bg-zinc-800 text-white w-full h-32 flex items-center px-4 sm:px-8 gap-4 sm:gap-8">
+            {/* Left: Logo */}
+            <div className="flex items-center min-w-0 basis-32 justify-start">
+                <img src={fresseLogo} alt="Fresse logo" className="w-24 sm:w-28 h-24 sm:h-28 object-contain shrink-0" />
+            </div>
 
-            <img src={fresseLogo} alt="Fresse logo" className="w-28 h-28 object-contain shrink-0" />
+            {/* Center: Title */}
+            <div className="flex-1 flex justify-center min-w-0">
+                <Link to="/salad-configurator" className="text-2xl sm:text-3xl font-bold outline-none break-words whitespace-normal text-center">
+                    BOWL-LASKURI
+                </Link>
+            </div>
 
-            <Link to="/salad-configurator" className="absolute left-1/2 transform -translate-x-1/2 text-3xl font-bold outline-none">
-                BOWL-LASKURI
-            </Link>
-
-            <div className="ml-auto flex items-center gap-2 shrink-0 relative">
+            {/* Right: Menu/User (mirrors left for centering) */}
+            <div className="flex items-center gap-2 shrink-0 basis-32 justify-end relative">
                 <button
                     type="button"
                     onClick={() => setIsMenuOpen((prev) => !prev)}
@@ -90,9 +96,8 @@ export function Header() {
                     </div>
                 )}
             </div>
-            
         </header>
-          <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-          </>
-      );
+        <LoginModal isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+        </>
+    );
 }
