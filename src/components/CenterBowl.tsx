@@ -70,7 +70,7 @@ export function CenterBowl({ baseIngredients }: CenterBowlProps) {
     return (
         <div className="flex flex-col items-center justify-center min-h-[400px] bg-white py-8">
 
-            <div className="relative w-80 h-80 flex items-center justify-center mx-auto">
+            <div className="relative w-80 h-80 flex items-center justify-center mx-auto" style={{ filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.6))' }}>
                 {selectedBowl?.image_url && (
                     <img
                         src={selectedBowl.image_url}
