@@ -24,7 +24,7 @@ export const IngredientCard = ({ ingredient }: Props) => {
   const token = useAuthStore((state) => state.token);
 
   const priceItem = prices.find(
-    (p: any) => p.item_id === ingredient.id
+    (p) => p.id === ingredient.id
   );
 
   return (
@@ -56,7 +56,7 @@ export const IngredientCard = ({ ingredient }: Props) => {
           <span className="text-xs font-semibold text-green-600">
             {token
               ? priceItem
-                ? `+ ${priceItem.price} €`
+                ? `+ ${priceItem.price ?? 0} €`
                 : <span className="text-gray-400">No price</span>
               : <span className="text-gray-400">Login to see price</span>
             }

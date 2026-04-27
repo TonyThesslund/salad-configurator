@@ -36,12 +36,15 @@ export const SummaryBar: React.FC = () => {
                     <p className="text-zinc-400">Ei valittuja ainesosia</p>
                 ) : (
                     <ul className="space-y-2">
-                        {allIngredients.map((item: Ingredient) => (
+                        {allIngredients.map((item: Ingredient) => {
+                        const price = prices.find(p => p.id === item.id)?.price;
+                        
+                        return (
                             <li 
                                 key={item.id} 
                                 className="flex items-center justify-between text-sm bg-zinc-700 rounded-xl px-4 py-2"
                             >
-                                <span>{item.name}</span>
+                                <span>{item.name} - {(price ?? 0).toFixed(2)} €</span>
                                 <button
                                     onClick={() => removeIngredient(item.id)}
                                     className="text-red-400 hover:text-red-300 text-lg leading-none w-6 h-6 flex items-center justify-center hover:bg-zinc-600 rounded-full transition-colors"
@@ -49,7 +52,8 @@ export const SummaryBar: React.FC = () => {
                                     ×
                                 </button>
                             </li>
-                        ))}
+                        );
+                        })}
                     </ul>
                 )}
             </div>
