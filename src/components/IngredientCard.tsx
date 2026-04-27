@@ -30,7 +30,7 @@ export const IngredientCard = ({ ingredient }: Props) => {
   return (
     <div
       onClick={() => addIngredient(ingredient)}
-         className="flex w-60 h-14 rounded-2xl overflow-hidden shadow bg-zinc-900 cursor-pointer transition group hover:shadow-lg hover:scale-102 hover:z-10"
+         className="flex w-60 h-16 rounded-2xl overflow-hidden shadow bg-zinc-900 cursor-pointer transition group hover:shadow-lg hover:scale-102 hover:z-10"
       style={{ minWidth: 220, maxWidth: 260 }}
     >
       {/* Image section */}
