@@ -73,34 +73,35 @@ export function CenterBowl({ onOpenSaveModal, baseIngredients }: CenterBowlProps
     };
 
     return (
-        <div className="flex-1 flex flex-col items-center justify-center min-h-[400px] mt-4 lg:mt-0">
-            <div className="flex gap-3 mb-6 items-center">
+        <div className="flex flex-col items-center justify-center min-h-[400px] bg-white py-8">
+            {/* Top controls */}
+            <div className="flex gap-4 mb-8 items-center justify-center">
                 <button
                     onClick={() => setBaseType(1)}
-                    className={baseType === 1 ? "border-2 border-green-500 px-3 py-1 rounded" : "border px-3 py-1 rounded"}
+                    className={`px-6 py-2 rounded-full font-semibold text-black shadow-sm transition border-2 ${baseType === 1 ? 'bg-[#C7E541] border-[#A2D135]' : 'bg-white border-zinc-200 hover:bg-zinc-100'}`}
                 >
                     Salaatti
                 </button>
                 <button
                     onClick={() => setBaseType(2)}
-                    className={baseType === 2 ? "border-2 border-green-500 px-3 py-1 rounded" : "border px-3 py-1 rounded"}
+                    className={`px-6 py-2 rounded-full font-semibold text-black shadow-sm transition border-2 ${baseType === 2 ? 'bg-[#C7E541] border-[#A2D135]' : 'bg-white border-zinc-200 hover:bg-zinc-100'}`}
                 >
                     Rahka
                 </button>
-                <button type="button" onClick={handleClearBowl} className="bg-gray-200 hover:bg-gray-300 rounded p-2" aria-label="Empty bowl">
-                    <img src={trashIcon} alt="" aria-hidden="true" className="w-5 h-5 brightness-0" />
+                <button type="button" onClick={handleClearBowl} className="rounded-full bg-zinc-200 hover:bg-zinc-300 w-10 h-10 flex items-center justify-center shadow-sm transition" aria-label="Empty bowl">
+                    <img src={trashIcon} alt="" aria-hidden="true" className="w-5 h-5" />
                 </button>
-                <button type="button" onClick={() => alert('Feature coming soon!')} className="bg-gray-200 hover:bg-gray-300 rounded p-2" aria-label="Undo">
-                    <img src={undoIcon} alt="" aria-hidden="true" className="w-5 h-5 brightness-0" />
+                <button type="button" onClick={() => alert('Feature coming soon!')} className="rounded-full bg-zinc-200 hover:bg-zinc-300 w-10 h-10 flex items-center justify-center shadow-sm transition" aria-label="Undo">
+                    <img src={undoIcon} alt="" aria-hidden="true" className="w-5 h-5" />
                 </button>
-                <button type="button" onClick={onOpenSaveModal} className="bg-gray-200 hover:bg-gray-300 rounded p-2" aria-label="Save">
-                    <img src={saveIcon} alt="" aria-hidden="true" className="w-5 h-5 brightness-0" />
+                <button type="button" onClick={onOpenSaveModal} className="rounded-full bg-zinc-200 hover:bg-zinc-300 w-10 h-10 flex items-center justify-center shadow-sm transition" aria-label="Save">
+                    <img src={saveIcon} alt="" aria-hidden="true" className="w-5 h-5" />
                 </button>
             </div>
 
 
 
-            <div className="relative w-80 h-80 flex items-center justify-center">
+            <div className="relative w-80 h-80 flex items-center justify-center mx-auto">
                 {selectedBowl?.image_url && (
                     <img
                         src={selectedBowl.image_url}
@@ -203,9 +204,9 @@ export function CenterBowl({ onOpenSaveModal, baseIngredients }: CenterBowlProps
                 </div>
             </div>
 
-            <div className="flex gap-6 mt-4">
-                <p>{totalWeight}g / {totalPrice.toFixed(2)}€</p>
-                <p>{selectedBowl ? selectedBowl.volume : 0} ml</p>
+            <div className="flex justify-between w-80 mt-4 text-black text-base font-medium">
+                <span>{totalWeight} g / {totalPrice.toFixed(2)} €</span>
+                <span>{selectedBowl ? selectedBowl.volume : 0} ml</span>
             </div>
 
             <SaveRecipeModal
