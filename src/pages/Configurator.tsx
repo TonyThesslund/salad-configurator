@@ -128,51 +128,57 @@ export default function Configurator() {
     );
   }
 
-  return (
-    <div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
-      <CenterControls onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)} handleClearBowl={handleClearBowl} />
-      <div className="flex w-full gap-6 items-stretch">
-        <div className="flex-[1] min-w-[280px] flex">
-        <BowlSelection bowls={bowls} />
-        </div>
+return (
+<div className="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col gap-8 mt-4">
+    <CenterControls
+    onOpenSaveModal={() => setIsSaveRecipeModalOpen(true)}
+    handleClearBowl={handleClearBowl}
+    />
 
-        <div className="flex-[2] min-w-0">
-          <CenterBowl 
-            baseIngredients={saladBases} 
-          />
-        </div>
+    <div className="flex flex-col gap-6 lg:flex-row">
 
-        <div className="flex-[1] min-w-[280px] flex">
-        {baseType === 2 ? (
-          <div className="bg-zinc-800 rounded-[3rem] pt-3 pb-6 px-3 text-white w-full flex flex-col items-center shadow-lg flex-1 min-h-[464px]">
+    {/* BowlSelection */}
+    <div className="order-2 lg:order-1 w-full lg:w-auto lg:flex-[1]">
+      <BowlSelection bowls={bowls} />
+    </div>
+
+    {/* CenterBowl */}
+    <div className="order-1 lg:order-2 w-full lg:flex-[2] min-h-[464px]">
+      <CenterBowl baseIngredients={saladBases} />
+    </div>
+
+    {/* BaseSelection */}
+    <div className="order-3 lg:order-3 w-full lg:w-auto lg:flex-[1] ">
+      {baseType === 2 ? (
+        <div className="bg-zinc-800 rounded-[3rem] pt-3 pb-6 px-3 text-white w-full flex flex-col items-center shadow-lg min-h-[464px]">
             <div className="bg-white text-black font-bold rounded-full w-8 h-8 flex items-center justify-center mb-4 shrink-0">
-              2
+             2
             </div>
 
-            <h2 className="mb-6 font-semibold text-lg">Valitse salaattipohja</h2>
+            <h2 className="mb-6 font-semibold text-lg">
+              Valitse salaattipohja
+            </h2>
 
             <div className="flex flex-1 items-center justify-center text-sm text-gray-400 text-center px-4">
-              No base options for quark
+             No base options for quark
             </div>
-          </div>
-        ) : (
-          <BaseSelection bases={bases} />
-        )}
         </div>
-
-      </div>
-
-      <IngredientSelection
-        categories={categories}
-        ingredients={ingredients}
-        isLoadingCategories={isLoadingCategories}
-        categoriesError={categoriesError}
-      />
-      <SummaryBar />
-      <SaveRecipeModal
-        isOpen={isSaveRecipeModalOpen}
-        onClose={() => setIsSaveRecipeModalOpen(false)}
-      />
+      ) : (
+        <BaseSelection bases={bases} />
+      )}
     </div>
-  );
+  </div>
+
+  <IngredientSelection
+    categories={categories}
+    ingredients={ingredients}
+    isLoadingCategories={isLoadingCategories}
+    categoriesError={categoriesError}
+  />
+
+  <SummaryBar />
+
+  <SaveRecipeModal isOpen={isSaveRecipeModalOpen} onClose={() => setIsSaveRecipeModalOpen(false)}/>
+</div>
+);
 }

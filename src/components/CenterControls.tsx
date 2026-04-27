@@ -13,7 +13,7 @@ export function CenterControls({ onOpenSaveModal, handleClearBowl }: CenterContr
   const baseType = useIngredientStore((state) => state.baseType);
 
   return (
-    <div className="flex gap-4 mb-8 items-center justify-center">
+    <div className="flex flex-wrap gap-4 mb-8 items-center justify-center">
       <button
         onClick={() => setBaseType(1)}
         className={`px-6 py-2 rounded-full font-semibold text-black shadow-sm transition border-2 ${baseType === 1 ? 'bg-[#C7E541] border-[#A2D135]' : 'bg-white border-zinc-200 hover:bg-zinc-100'}`}
